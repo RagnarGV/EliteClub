@@ -1,0 +1,48 @@
+<div class="container my-4">
+  <h2 class="text-center text-warning">Weekly Cash Game Schedule</h2>
+  <p class="text-center">
+    Club Elite is open seven days a week. Monday-Friday we open at 7pm and close
+    at 4am. On weekends and holidays, we open at 3pm and close at 4am.
+  </p>
+
+  <div class="accordion" id="scheduleAccordion">
+    <div class="accordion-item" *ngFor="let day of schedule; let i = index">
+      <h2 class="accordion-header" id="heading{{ i }}">
+        <button
+          class="accordion-button"
+          type="button"
+          data-bs-toggle="collapse"
+          [attr.data-bs-target]="'#collapse' + i"
+          [attr.aria-expanded]="i === 0 ? 'true' : 'false'"
+          [attr.aria-controls]="'collapse' + i"
+          [class.collapsed]="i !== 0"
+        >
+          <h5>{{ day.day }}</h5>
+        </button>
+      </h2>
+      <div
+        [id]="'collapse' + i"
+        class="accordion-collapse collapse"
+        [class.show]="i === 0"
+        [attr.aria-labelledby]="'heading' + i"
+        data-bs-parent="#scheduleAccordion"
+      >
+        <div class="accordion-body">
+          <div class="card text-center">
+            <div class="card-header bg-dark text-white">
+              <small>{{ day.time }}</small>
+            </div>
+            <div class="card-body">
+              <p class="card-text" *ngFor="let game of day.games">
+                <strong>{{ game.type }}</strong
+                ><br />
+                <span>{{ game.limit }}</span>
+              </p>
+              <p class="text-muted">{{ day.description }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

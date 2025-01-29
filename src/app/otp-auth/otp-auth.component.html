@@ -1,0 +1,19 @@
+<div>
+  <h2>Phone Number Authentication</h2>
+
+  <!-- Phone Number Input -->
+  <div *ngIf="!verificationSent">
+    <input [(ngModel)]="phoneNumber" placeholder="+1XXXXXXXXXX" />
+    <button (click)="sendOTP()">Send OTP</button>
+    <div id="recaptcha-container"></div>
+  </div>
+
+  <!-- OTP Verification Modal -->
+  <div *ngIf="verificationSent">
+    <h3>Enter OTP</h3>
+    <input [(ngModel)]="otpCode" placeholder="Enter OTP" />
+    <button (click)="verifyOTP()">Verify</button>
+  </div>
+
+  <p *ngIf="authMessage">{{ authMessage }}</p>
+</div>

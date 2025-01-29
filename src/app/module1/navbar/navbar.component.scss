@@ -1,0 +1,10 @@
+.nav-link {
+  font-size: larger;
+  margin: 5px;
+}
+.nav-link:hover {
+  color: goldenrod;
+  font-weight: bolder;
+  border: solid 3px black;
+  transform: skewX(-10deg);
+}

@@ -1,0 +1,19 @@
+.card {
+  margin: 10px 0;
+}
+.card-header {
+  font-weight: bold;
+}
+.text-primary {
+  color: #007bff !important;
+}
+.accordion-button {
+  background-color: goldenrod;
+  color: #fff;
+}
+.accordion-button:not(.collapsed) {
+  background-color: goldenrod;
+}
+.accordion-body {
+  padding: 0;
+}

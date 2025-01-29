@@ -1,0 +1,29 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Schedule {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  day         String
+  time        String
+  games       Game[]
+  description String
+}
+
+model Game {
+  id         String    @id @default(auto()) @map("_id") @db.ObjectId
+  type       String
+  limit      String
+  Schedule   Schedule? @relation(fields: [scheduleId], references: [id])
+  scheduleId String?   @db.ObjectId
+}
+
+model User {
+  id         String    @id @default(auto()) @map("_id") @db.ObjectId
+  phone       String
+}
