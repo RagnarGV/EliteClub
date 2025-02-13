@@ -15,27 +15,41 @@ export interface Schedule {
   description: string;
 }
 
+export interface Waitlist {
+  firstName: string;
+  lastInitial: string;
+  phone: string;
+  gameType: string;
+  smsUpdates: boolean;
+  checkedIn: boolean;
+}
+
 @Injectable({
   providedIn: 'root',
 })
 export class ScheduleService {
-  private apiUrl = 'http://localhost:3000/api';
+  private apiUrl = 'https://eliteclub-api.onrender.com/api';
 
   constructor(private http: HttpClient) {}
 
   getSchedule(): Observable<Schedule[]> {
-    return this.http.get<Schedule[]>(this.apiUrl);
+    return this.http.get<Schedule[]>(this.apiUrl + '/schedule');
+  }
+
+  getWaitlist(): Observable<Waitlist[]> {
+    return this.http.get<Waitlist[]>(this.apiUrl + '/Waitlist');
   }
 
   async getGalleryItems() {
-    const response = await axios.get('http://localhost:3000/api/gallery');
+    const response = await axios.get(this.apiUrl + '/gallery');
     return response.data;
   }
 
   async checkVerification(phoneNumber: string): Promise<boolean> {
     try {
       const response = await axios.get(`${this.apiUrl}/verify/${phoneNumber}`);
-      return response.data.isVerified;
+      console.log(response);
+      return response.data.user;
     } catch (error) {
       console.error('Error checking verification:', error);
       throw error;

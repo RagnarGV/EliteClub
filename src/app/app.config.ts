@@ -10,6 +10,7 @@ import { provideFirebaseApp } from '@angular/fire/app';
 import { provideAuth } from '@angular/fire/auth';
 import { getAuth } from 'firebase/auth';
 import { environment } from '../environments/environment.development';
+import { provideAnimations } from '@angular/platform-browser/animations';
 
 const firebase = {
   apiKey: 'AIzaSyBCzOwAKe5SMJGN_k-6USQPWx_n7UO5nR8',
@@ -25,6 +26,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideClientHydration(),
     provideHttpClient(),
+    provideAnimations(),
     { provide: FIREBASE_OPTIONS, useValue: environment.firebase },
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAuth(() => getAuth()),

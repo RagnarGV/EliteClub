@@ -1,10 +1,16 @@
 .nav-link {
   font-size: larger;
+  font-weight: bolder;
   margin: 5px;
+  transform: skewX(-10deg);
+  transition: all 0.1s;
 }
-.nav-link:hover {
+
+.nav-link:hover,
+.nav-link.active {
   color: goldenrod;
   font-weight: bolder;
-  border: solid 3px black;
   transform: skewX(-10deg);
+  background-color: black;
+  box-shadow: 5px 5px 0px goldenrod;
 }

@@ -4,10 +4,17 @@
   </div>
 
   <div class="gallery-grid">
-    <div *ngFor="let item of galleryItems" class="gallery-card">
+    <div
+      *ngFor="let item of galleryItems; let i = index; trackBy: tracked"
+      class="gallery-card"
+    >
       <img
         src="http://localhost:3000{{ item.image }}"
         [alt]="item.title"
+        [@slideInOut]
+        (mouseenter)="toggle()"
+        (mouseleave)="toggle()"
+        [@openClose]="isOpen ? 'mouseover' : 'mouseleave'"
         class="gallery-image"
       />
       <div class="gallery-details">
