@@ -151,7 +151,7 @@ export class WaitlistComponent implements OnInit {
       .auth()
       .signInWithCredential(credential)
       .then(async (userCredential) => {
-        await this.waitlistService.addToWaitlist(formData);
+        await this.waitlistService.saveUser(formData);
         await this.waitlistService.addToWaitlist(formData);
         this.authMessage = 'OTP verified! User authenticated.';
         this.firstUserModal = false;
