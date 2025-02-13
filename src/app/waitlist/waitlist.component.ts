@@ -9,10 +9,12 @@ import {
 import { ScheduleService, Waitlist } from '../schedule.service';
 import { FormsModule } from '@angular/forms';
 import { AngularFireModule } from '@angular/fire/compat';
-import { AngularFireAuthModule } from '@angular/fire/compat/auth';
-import { PhoneAuthProvider } from '@angular/fire/auth';
+import {
+  AngularFireAuth,
+  AngularFireAuthModule,
+} from '@angular/fire/compat/auth';
+import { Auth, PhoneAuthProvider } from '@angular/fire/auth';
 import firebase from 'firebase/compat/app';
-import { response } from 'express';
 @Component({
   selector: 'app-waitlist',
   standalone: true,
@@ -39,6 +41,8 @@ export class WaitlistComponent implements OnInit {
   authMessage: string = '';
   recaptchaVerifier: any;
   constructor(
+    private afAuth: AngularFireAuth,
+    private auth: Auth,
     private fb: FormBuilder,
     private waitlistService: ScheduleService
   ) {
@@ -88,6 +92,7 @@ export class WaitlistComponent implements OnInit {
       console.log('Form is invalid');
     }
   }
+
   async sendOTP() {
     if (!this.phoneNumber.startsWith('+')) {
       this.authMessage =
@@ -98,6 +103,9 @@ export class WaitlistComponent implements OnInit {
       'recaptcha-container',
       {
         size: 'invisible', // Set to 'normal' instead of 'invisible' for testing
+        callback: (response: any) => {
+          console.log('reCAPTCHA solved:', response);
+        },
       }
     );
     // if (!this.recaptchaVerifier) {
