@@ -57,6 +57,7 @@
             class="form-control mb-2"
             [(ngModel)]="phoneNumber"
             placeholder="+1XXXXXXXXXX"
+            disabled="true"
           />
           <button class="btn" (click)="sendOTP()">Send OTP</button>
           <div id="recaptcha-container"></div>
@@ -65,7 +66,11 @@
         <!-- OTP Verification Modal -->
         <div *ngIf="verificationSent">
           <h3>Enter OTP</h3>
-          <input [(ngModel)]="otpCode" placeholder="Enter OTP" />
+          <input
+            class="form-control mb-2"
+            [(ngModel)]="otpCode"
+            placeholder="Enter OTP"
+          />
           <button class="btn" (click)="verifyOTP()">Verify</button>
         </div>
 

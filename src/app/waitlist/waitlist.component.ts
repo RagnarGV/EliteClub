@@ -49,7 +49,10 @@ export class WaitlistComponent implements OnInit {
     this.waitlistForm = this.fb.group({
       firstName: ['', [Validators.required]],
       lastInitial: ['', [Validators.required, Validators.maxLength(1)]],
-      phone: ['', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],
+      phone: [
+        { value: '+1', disabled: false },
+        [Validators.required, Validators.pattern(/^\+1[0-9]{10}$/)],
+      ],
       gameType: [false, [Validators.requiredTrue]],
       smsUpdates: [false],
     });
@@ -82,6 +85,7 @@ export class WaitlistComponent implements OnInit {
           this.waitlistForm.reset();
           this.getWaitlist();
         } else {
+          this.phoneNumber = this.waitlistForm.controls['phone'].value;
           this.firstUserModal = true;
         }
       } catch (error) {
@@ -108,19 +112,7 @@ export class WaitlistComponent implements OnInit {
         },
       }
     );
-    // if (!this.recaptchaVerifier) {
-    //   this.recaptchaVerifier = new RecaptchaVerifier(
-    //     this.auth,
-    //     'recaptcha-container',
-    //     {
-    //       size: 'invisible',
-    //       callback: (response: any) => {
-    //         console.log('reCAPTCHA solved:', response);
-    //       },
-    //     }
-    //   );
-    //   await this.recaptchaVerifier.render();
-    // }
+
     firebase
       .auth()
       .signInWithPhoneNumber(this.phoneNumber, this.recaptchaVerifier)
