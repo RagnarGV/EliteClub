@@ -1,64 +1,65 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-transparent">
-  <!-- <a class="navbar-brand" href="#">Elite Club</a>
-  <button
-    class="navbar-toggler"
-    type="button"
-    data-toggle="collapse"
-    data-target="#navbarNav"
-    aria-controls="navbarNav"
-    aria-expanded="false"
-    aria-label="Toggle navigation"
-  >
-    <span class="navbar-toggler-icon"></span>
-  </button> -->
-  <div class="collapse navbar-collapse" id="navbarNav">
-    <ul class="navbar-nav mx-auto">
-      <li class="nav-item active">
-        <a
-          class="nav-link"
-          [routerLink]="['/home']"
-          routerLinkActive="active"
-          [routerLinkActiveOptions]="{ exact: true }"
-        >
-          Home
-        </a>
-      </li>
-      <li class="nav-item">
-        <a
-          class="nav-link"
-          [routerLink]="['/schedule']"
-          routerLinkActive="active"
-        >
-          Schedule
-        </a>
-      </li>
-      <li class="nav-item">
-        <a
-          class="nav-link"
-          [routerLink]="['/waitlist']"
-          routerLinkActive="active"
-        >
-          Waitlist
-        </a>
-      </li>
-      <li class="nav-item">
-        <a
-          class="nav-link"
-          [routerLink]="['/about-us']"
-          routerLinkActive="active"
-        >
-          About Us
-        </a>
-      </li>
-      <li class="nav-item">
-        <a
-          class="nav-link"
-          [routerLink]="['/gallery']"
-          routerLinkActive="active"
-        >
-          Gallery
-        </a>
-      </li>
-    </ul>
+  <div class="container">
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarNav"
+      aria-controls="navbarNav"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav mx-auto">
+        <li class="nav-item">
+          <a
+            class="nav-link"
+            [routerLink]="['/home']"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+          >
+            Home
+          </a>
+        </li>
+        <li class="nav-item">
+          <a
+            class="nav-link"
+            [routerLink]="['/schedule']"
+            routerLinkActive="active"
+          >
+            Schedule
+          </a>
+        </li>
+        <li class="nav-item">
+          <a
+            class="nav-link"
+            [routerLink]="['/waitlist']"
+            routerLinkActive="active"
+          >
+            Waitlist
+          </a>
+        </li>
+        <li class="nav-item">
+          <a
+            class="nav-link"
+            [routerLink]="['/about-us']"
+            routerLinkActive="active"
+          >
+            About Us
+          </a>
+        </li>
+        <li class="nav-item">
+          <a
+            class="nav-link"
+            [routerLink]="['/gallery']"
+            routerLinkActive="active"
+          >
+            Gallery
+          </a>
+        </li>
+      </ul>
+    </div>
   </div>
 </nav>

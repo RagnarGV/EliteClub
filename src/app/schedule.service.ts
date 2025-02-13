@@ -67,6 +67,15 @@ export class ScheduleService {
 
   async saveUser(userData: any): Promise<void> {
     try {
+      await axios.post(`${this.apiUrl}/users`, userData);
+    } catch (error) {
+      console.error('Error saving user:', error);
+      throw error;
+    }
+  }
+
+  async addToWaitlist(userData: any): Promise<void> {
+    try {
       await axios.post(`${this.apiUrl}/waitlist`, userData);
     } catch (error) {
       console.error('Error saving user:', error);

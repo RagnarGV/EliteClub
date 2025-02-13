@@ -76,7 +76,7 @@ export class WaitlistComponent implements OnInit {
 
         if (isVerified) {
           // Add user to the waitlist and save to the database
-          await this.waitlistService.saveUser(formData);
+          await this.waitlistService.addToWaitlist(formData);
 
           // Optionally, reset the form
           this.waitlistForm.reset();
@@ -151,8 +151,12 @@ export class WaitlistComponent implements OnInit {
       .auth()
       .signInWithCredential(credential)
       .then(async (userCredential) => {
-        await this.waitlistService.saveUser(formData);
+        await this.waitlistService.addToWaitlist(formData);
+        await this.waitlistService.addToWaitlist(formData);
         this.authMessage = 'OTP verified! User authenticated.';
+        this.firstUserModal = false;
+        this.waitlistForm.reset();
+        this.getWaitlist();
       })
       .catch((error) => {
         this.authMessage = `Verification failed: ${error.message}`;
