@@ -5,13 +5,14 @@ import { GalleryComponent } from './gallery/gallery.component';
 import { ScheduleComponent } from './schedule/schedule.component';
 import { WaitlistComponent } from './waitlist/waitlist.component';
 import { OtpAuthComponent } from './otp-auth/otp-auth.component';
+import { AppComponent } from './app.component';
 
 export const routes: Routes = [
-  { path: 'home', component: HomeComponent },
+  { path: '', component: HomeComponent },
   { path: 'about-us', component: AboutUsComponent },
   { path: 'gallery', component: GalleryComponent },
   { path: 'schedule', component: ScheduleComponent },
   { path: 'waitlist', component: WaitlistComponent },
   { path: 'otp', component: OtpAuthComponent },
-  { path: '', redirectTo: '/home', pathMatch: 'full' },
+  { path: '**', redirectTo: '', pathMatch: 'full' },
 ];

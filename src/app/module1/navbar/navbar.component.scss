@@ -1,8 +1,9 @@
 .nav-link {
   font-size: larger;
+  color: rgb(170, 146, 84);
   font-weight: bolder;
   margin: 5px;
-  transform: skewX(-10deg);
+  // transform: skewX(-10deg);
   transition: all 0.1s;
 }
 
@@ -10,7 +11,8 @@
 .nav-link.active {
   color: goldenrod;
   font-weight: bolder;
-  transform: skewX(-10deg);
-  background-color: black;
-  box-shadow: 5px 5px 0px goldenrod;
+  // transform: skewX(-10deg);
+  border-bottom: 3px solid burlywood;
+  // border-radius: 5px;
+  box-shadow: 0px 1px 0px goldenrod;
 }

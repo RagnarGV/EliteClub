@@ -21,6 +21,11 @@
   max-width: 1200px; // Optional: Limit the total grid width
 }
 
+.gallery-card:hover {
+  transform: scale(1.1);
+  transition: 100ms all ease-in;
+}
+
 .gallery-card {
   background: #fff;
   border: 1px solid #ddd;

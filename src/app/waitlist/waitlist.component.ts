@@ -15,6 +15,8 @@ import {
 } from '@angular/fire/compat/auth';
 import { Auth, PhoneAuthProvider } from '@angular/fire/auth';
 import firebase from 'firebase/compat/app';
+import { trigger, transition, style, animate } from '@angular/animations';
+
 @Component({
   selector: 'app-waitlist',
   standalone: true,
@@ -25,6 +27,7 @@ import firebase from 'firebase/compat/app';
     AngularFireModule,
     AngularFireAuthModule,
   ],
+
   templateUrl: './waitlist.component.html',
   styleUrl: './waitlist.component.scss',
   providers: [ScheduleService],
