@@ -74,7 +74,7 @@ export class WaitlistComponent implements OnInit {
   async onSubmit() {
     if (this.waitlistForm.valid) {
       const formData = this.waitlistForm.value;
-      console.log(formData);
+
       try {
         const isVerified = await this.waitlistService.checkVerification(
           formData.phone
@@ -126,7 +126,7 @@ export class WaitlistComponent implements OnInit {
         this.authMessage = 'OTP sent successfully!';
       })
       .catch((error) => {
-        this.authMessage = `Error: ${error.message}`;
+        this.authMessage = `Error: ${error}`;
       });
   }
 

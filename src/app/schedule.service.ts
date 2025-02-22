@@ -77,9 +77,10 @@ export class ScheduleService {
   async addToWaitlist(userData: any): Promise<void> {
     try {
       await axios.post(`${this.apiUrl}/waitlist`, userData);
-    } catch (error) {
-      console.error('Error saving user:', error);
-      throw error;
+    } catch (error: any) {
+      if (error.status === 400) {
+        alert('Phone number already exists');
+      }
     }
   }
 }
