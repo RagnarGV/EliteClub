@@ -19,7 +19,7 @@ export class ScheduleComponent {
     this.getSchedule();
   }
   getSchedule() {
-    this.scheduleService.getSchedule().subscribe((data) => {
+    this.scheduleService.getSchedule().then((data) => {
       console.log(data);
       this.schedule = data;
     });

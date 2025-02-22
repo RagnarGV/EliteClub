@@ -1,6 +1,4 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
 import axios from 'axios';
 axios.defaults.headers.common = {
   'Cache-Control': 'no-cache',
@@ -34,14 +32,16 @@ export interface Waitlist {
 export class ScheduleService {
   private apiUrl = 'https://eliteclub-api.onrender.com/api';
 
-  constructor(private http: HttpClient) {}
+  constructor() {}
 
-  getSchedule(): Observable<Schedule[]> {
-    return this.http.get<Schedule[]>(this.apiUrl + '/schedule');
+  async getSchedule() {
+    const response = await axios.get(this.apiUrl + '/schedule');
+    return response.data;
   }
 
-  getWaitlist(): Observable<Waitlist[]> {
-    return this.http.get<Waitlist[]>(this.apiUrl + '/Waitlist');
+  async getWaitlist() {
+    const response = await axios.get(this.apiUrl + '/waitlist');
+    return response.data;
   }
 
   async getGalleryItems() {

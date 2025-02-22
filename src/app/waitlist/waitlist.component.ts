@@ -65,7 +65,7 @@ export class WaitlistComponent implements OnInit {
   }
 
   async getWaitlist() {
-    this.waitlistService.getWaitlist().subscribe((response) => {
+    this.waitlistService.getWaitlist().then((response) => {
       console.log(response);
       this.waitlist = response;
     });
