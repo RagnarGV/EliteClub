@@ -8,6 +8,7 @@ import { ScheduleService, Schedule } from '../schedule.service';
   imports: [CommonModule, HttpClientModule],
   templateUrl: './schedule.component.html',
   styleUrl: './schedule.component.scss',
+  providers: [ScheduleService],
 })
 export class ScheduleComponent {
   schedule: Schedule[] = [];
