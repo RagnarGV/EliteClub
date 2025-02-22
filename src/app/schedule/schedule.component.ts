@@ -1,11 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { ScheduleService, Schedule } from '../schedule.service';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 @Component({
   selector: 'app-schedule',
   standalone: true,
-  imports: [CommonModule, HttpClientModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule],
   templateUrl: './schedule.component.html',
   styleUrl: './schedule.component.scss',
   providers: [ScheduleService],
