@@ -11,11 +11,14 @@ import { ScheduleService, Schedule } from '../schedule.service';
   providers: [ScheduleService],
 })
 export class ScheduleComponent {
-  schedule: Schedule[] = [];
+  schedule: any[] = [];
 
   constructor(private scheduleService: ScheduleService) {}
 
   ngOnInit(): void {
+    this.getSchedule();
+  }
+  getSchedule() {
     this.scheduleService.getSchedule().subscribe((data) => {
       console.log(data);
       this.schedule = data;
