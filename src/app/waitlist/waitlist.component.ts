@@ -43,6 +43,7 @@ export class WaitlistComponent implements OnInit {
   verificationSent: boolean = false;
   authMessage: string = '';
   recaptchaVerifier: any;
+  todayGames: any[] = [];
   constructor(
     private afAuth: AngularFireAuth,
     private auth: Auth,
@@ -56,14 +57,29 @@ export class WaitlistComponent implements OnInit {
         { value: '+1', disabled: false },
         [Validators.required, Validators.pattern(/^\+1[0-9]{10}$/)],
       ],
-      gameType: [false, [Validators.requiredTrue]],
+      gameType: ['', [Validators.required]],
       smsUpdates: [false],
     });
   }
   ngOnInit(): void {
     this.getWaitlist();
+    this.getTodayGames();
   }
-
+  async getTodayGames() {
+    this.waitlistService.getSchedule().then((response) => {
+      response.forEach((day: { day: string; games: any[] }) => {
+        day.games.forEach((game: { date: string }) => {
+          if (
+            day.day ===
+            new Date().toLocaleDateString('en-US', { weekday: 'long' })
+          ) {
+            console.log(game);
+            this.todayGames.push(game);
+          }
+        });
+      });
+    });
+  }
   async getWaitlist() {
     this.waitlistService.getWaitlist().then((response) => {
       console.log(response);
