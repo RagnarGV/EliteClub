@@ -30,8 +30,8 @@ export interface Waitlist {
   providedIn: 'root',
 })
 export class ScheduleService {
-  //private apiUrl = 'https://eliteclub-api.onrender.com/api';
-  private apiUrl = 'http://localhost:3000/api';
+  private apiUrl = 'https://eliteclub-api.onrender.com/api';
+  //private apiUrl = 'http://localhost:3000/api';
   constructor() {}
 
   async getSchedule() {
