@@ -2,7 +2,7 @@ body {
   background-color: black;
 }
 .block {
-  animation: appear 1s linear;
+  animation: appear 1.2s linear;
   animation-timeline: view();
   animation-range: entry 0% cover 40%;
 }
