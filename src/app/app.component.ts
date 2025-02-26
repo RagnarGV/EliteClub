@@ -31,7 +31,9 @@ export class AppComponent {
 
   constructor(private router: Router) {
     this.router.events.subscribe(() => {
-      this.isWaitlistRoute = this.router.url.includes('/waitlist');
+      this.isWaitlistRoute =
+        this.router.url.includes('/waitlist') ||
+        this.router.url.includes('/toc');
     });
   }
 }

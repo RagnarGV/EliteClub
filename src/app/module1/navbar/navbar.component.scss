@@ -3,8 +3,9 @@
   color: rgb(170, 146, 84);
   font-weight: bolder;
   margin: 5px;
+
   // transform: skewX(-10deg);
-  transition: all 0.1s;
+  transition: all 0.2s ease-in-out;
 }
 
 .nav-link:hover,
@@ -12,7 +13,20 @@
   color: goldenrod;
   font-weight: bolder;
   // transform: skewX(-10deg);
-  border-bottom: 3px solid burlywood;
+  border-bottom: 2px solid burlywood;
   // border-radius: 5px;
   box-shadow: 0px 1px 0px goldenrod;
+}
+nav {
+  position: fixed;
+  top: 10px;
+  background: rgba(255, 255, 255, 0.1); /* Semi-transparent */
+  width: 90%;
+  max-width: 1100px;
+  border-radius: 15px;
+  backdrop-filter: blur(30px);
+  color: rgb(170, 146, 84);
+  box-shadow: 0px 0px 30px 0px rgba(277, 228, 237, 0.37);
+  border: 2px solid rgba(255, 255, 255, 0.18);
+  margin: 0 auto;
 }
