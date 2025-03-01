@@ -1,6 +1,6 @@
 <div class="mx-5 mt-5 pt-5">
   <div class="form-container my-5">
-    <h2>Join The Waitlist</h2>
+    <h2>Join The Tournament of Champions</h2>
     <form [formGroup]="waitlistForm" (ngSubmit)="onSubmit()">
       <div class="form-group">
         <label for="firstName">First Name</label>
@@ -64,7 +64,7 @@
     <div *ngIf="firstUserModal" class="error-message">
       <div>
         <h2>Phone Number Authentication</h2>
-
+        <p>{{ seats }} seats are available for the tournament of champions.</p>
         <!-- Phone Number Input -->
         <div *ngIf="!verificationSent">
           <input
@@ -108,8 +108,8 @@
           >[{{ entry.gameType }}]</span
         >
         <!-- <span class="sms-info" *ngIf="entry.smsUpdates"
-          >[SMS Updates Enabled]</span
-        > -->
+            >[SMS Updates Enabled]</span
+          > -->
         <span class="status-info" *ngIf="entry.checkedIn">✔️</span>
       </li>
     </ul>

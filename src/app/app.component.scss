@@ -1,11 +1,11 @@
 body {
   background-color: black;
 }
-.block {
-  animation: appear 1.2s linear;
-  animation-timeline: view();
-  animation-range: entry 0% cover 40%;
-}
+// .block {
+//   animation: appear 1.2s linear;
+//   animation-timeline: view();
+//   animation-range: entry 0% cover 40%;
+// }
 
 @keyframes appear {
   from {
@@ -17,12 +17,6 @@ body {
     scale: 1;
   }
 }
-
-/* You can add global styles to this file, and also import other style files */
-html {
-    scroll-snap-type: y mandatory;
-  }
- 
 
 section {
   scroll-snap-align: start;

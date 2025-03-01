@@ -15,10 +15,8 @@ import {
 } from '@angular/fire/compat/auth';
 import { Auth, PhoneAuthProvider } from '@angular/fire/auth';
 import firebase from 'firebase/compat/app';
-
 @Component({
-  selector: 'app-waitlist',
-  standalone: true,
+  selector: 'app-toc',
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -26,12 +24,10 @@ import firebase from 'firebase/compat/app';
     AngularFireModule,
     AngularFireAuthModule,
   ],
-
-  templateUrl: './waitlist.component.html',
-  styleUrl: './waitlist.component.scss',
-  providers: [ScheduleService],
+  templateUrl: './toc.component.html',
+  styleUrl: './toc.component.scss',
 })
-export class WaitlistComponent implements OnInit {
+export class TocComponent implements OnInit {
   waitlistForm: FormGroup;
   waitlist: any[] = [];
   errorMessage: string = '';
@@ -43,6 +39,7 @@ export class WaitlistComponent implements OnInit {
   authMessage: string = '';
   recaptchaVerifier: any;
   todayGames: any[] = [];
+  seats: any = 0;
   constructor(
     private afAuth: AngularFireAuth,
     private auth: Auth,

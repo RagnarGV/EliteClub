@@ -87,4 +87,9 @@ export class ScheduleService {
       }
     }
   }
+
+  async getReviews() {
+    const response = await axios.get(`${this.apiUrl}/reviews`);
+    return response.data;
+  }
 }
