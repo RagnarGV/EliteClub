@@ -1,0 +1,55 @@
+<div class="mx-5 pt-5">
+  <h1 class="title text-center text-warning py-5">Customer Reviews</h1>
+  <div id="carouselExample" class="carousel slide">
+    <div class="carousel-indicators">
+      <button
+        *ngFor="let review of reviews; let i = index"
+        type="button"
+        [attr.data-bs-target]="'#carouselExample'"
+        [attr.data-bs-slide-to]="i"
+        [class.active]="i === 0"
+        [attr.aria-label]="'Slide ' + (i + 1)"
+      ></button>
+    </div>
+    <div
+      class="carousel-inner container mx-5 my-4 border px-5 border-warning rounded-3"
+    >
+      <div
+        *ngFor="let review of reviews; let i = index"
+        [class.carousel-item]="true"
+        [class.active]="i === 0"
+      >
+        <div class="card bg-transparent text-white">
+          <div class="card-header">Quote</div>
+          <div class="card-body">
+            <blockquote class="blockquote mb-0">
+              <p>{{ review.review }}</p>
+              <footer class="blockquote-footer">
+                {{ review.rating }} star by
+                <cite title="Source Title">{{ review.name }}</cite>
+              </footer>
+            </blockquote>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button
+      class="carousel-control-prev"
+      type="button"
+      data-bs-target="#carouselExample"
+      data-bs-slide="prev"
+    >
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button
+      class="carousel-control-next"
+      type="button"
+      data-bs-target="#carouselExample"
+      data-bs-slide="next"
+    >
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div>
+</div>

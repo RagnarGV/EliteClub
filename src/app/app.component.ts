@@ -8,6 +8,7 @@ import { GalleryComponent } from './gallery/gallery.component';
 import { HomeComponent } from './home/home.component';
 import { AboutUsComponent } from './about-us/about-us.component';
 import { CommonModule } from '@angular/common';
+import { ReviewsComponent } from './reviews/reviews.component';
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -20,6 +21,7 @@ import { CommonModule } from '@angular/common';
     HomeComponent,
     AboutUsComponent,
     RouterOutlet,
+    ReviewsComponent,
   ],
 
   templateUrl: './app.component.html',
