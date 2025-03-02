@@ -61,6 +61,7 @@ export class WaitlistComponent implements OnInit {
     });
   }
   ngOnInit(): void {
+    window.scrollTo(0, 0);
     this.getWaitlist();
     this.getTodayGames();
   }
