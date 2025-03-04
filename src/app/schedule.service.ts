@@ -31,21 +31,22 @@ export interface Waitlist {
 })
 export class ScheduleService {
   private apiUrl = 'https://eliteclub-api.onrender.com/api';
+  private newApiUrl = 'https://clubelite.ca/apis';
   //private apiUrl = 'http://localhost:3000/api';
   constructor() {}
 
   async getSchedule() {
-    const response = await axios.get(this.apiUrl + '/schedule');
+    const response = await axios.get(this.newApiUrl + '/schedule');
     return response.data;
   }
 
   async getWaitlist() {
-    const response = await axios.get(this.apiUrl + '/waitlist');
+    const response = await axios.get(this.newApiUrl + '/waitlist');
     return response.data;
   }
 
   async getGalleryItems() {
-    const response = await axios.get(this.apiUrl + '/gallery');
+    const response = await axios.get(this.newApiUrl + '/gallery');
     return response.data;
   }
 
@@ -80,7 +81,7 @@ export class ScheduleService {
 
   async addToWaitlist(userData: any): Promise<void> {
     try {
-      await axios.post(`${this.apiUrl}/waitlist`, userData);
+      await axios.post(`${this.newApiUrl}/waitlist`, userData);
     } catch (error: any) {
       if (error.status === 400) {
         alert('Phone number already exists');
@@ -89,7 +90,7 @@ export class ScheduleService {
   }
 
   async getReviews() {
-    const response = await axios.get(`${this.apiUrl}/reviews`);
+    const response = await axios.get(`${this.newApiUrl}/reviews`);
     return response.data;
   }
 }
