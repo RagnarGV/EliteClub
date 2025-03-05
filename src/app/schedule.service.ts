@@ -30,7 +30,7 @@ export interface Waitlist {
   providedIn: 'root',
 })
 export class ScheduleService {
-  private apiUrl = 'https://eliteclub-api.onrender.com/api';
+  //private apiUrl = 'https://eliteclub-api.onrender.com/api';
   private newApiUrl = 'https://clubelite.ca/apis';
   //private apiUrl = 'http://localhost:3000/api';
   constructor() {}
@@ -52,7 +52,9 @@ export class ScheduleService {
 
   async checkVerification(phoneNumber: string): Promise<boolean> {
     try {
-      const response = await axios.get(`${this.apiUrl}/verify/${phoneNumber}`);
+      const response = await axios.get(
+        `${this.newApiUrl}/verify/${phoneNumber}`
+      );
       console.log(response);
       return response.data.user;
     } catch (error) {
@@ -61,18 +63,33 @@ export class ScheduleService {
     }
   }
 
-  async triggerVerification(phoneNumber: string): Promise<void> {
+  async triggerVerification(phoneNumber: any): Promise<void> {
     try {
-      await axios.post(`${this.apiUrl}/verify`, { phoneNumber });
+      const formData = new FormData();
+      formData.append('phoneNumber', phoneNumber);
+      let result = await axios.post(`${this.newApiUrl}/send-otp`, formData);
+      console.log(result);
     } catch (error) {
       console.error('Error triggering verification:', error);
       throw error;
     }
   }
 
+  async verifyOTP(phoneNumber: string, otp: string): Promise<void> {
+    try {
+      const formData = new FormData();
+      formData.append('phoneNumber', phoneNumber);
+      formData.append('otp', otp);
+      await axios.post(`${this.newApiUrl}/verify-otp`, formData);
+    } catch (error) {
+      console.error('Error verifying OTP:', error);
+      throw error;
+    }
+  }
+
   async saveUser(userData: any): Promise<void> {
     try {
-      await axios.post(`${this.apiUrl}/users`, userData);
+      await axios.post(`${this.newApiUrl}/users`, userData);
     } catch (error) {
       console.error('Error saving user:', error);
       throw error;

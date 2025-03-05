@@ -1,23 +1,25 @@
 <div class="mx-5 pt-5">
   <h1 class="title text-center text-warning py-5">Club Elite Gallery</h1>
-  <div class="container gap-4 my-4">
-    <div *ngIf="galleryItems.length === 0" class="no-items">
-      No gallery items available.
-    </div>
+  <div class="container border border-warning rounded-3">
+    <div class="card-container gap-4 my-4 p-5">
+      <div *ngIf="galleryItems.length === 0" class="no-items">
+        No gallery items available.
+      </div>
 
-    <div
-      *ngFor="let item of galleryItems; let i = index; trackBy: tracked"
-      class="card"
-    >
-      <img
-        src="{{ item.image }}"
-        [alt]="item.title"
-        [@slideInOut]
-        class="gallery-image"
-      />
-      <div class="gallery-details">
-        <h3>{{ item.title }}</h3>
-        <p>{{ item.description }}</p>
+      <div
+        *ngFor="let item of galleryItems; let i = index; trackBy: tracked"
+        class="card"
+      >
+        <img
+          src="{{ item.image }}"
+          [alt]="item.title"
+          [@slideInOut]
+          class="gallery-image"
+        />
+        <div class="gallery-details">
+          <h3>{{ item.title }}</h3>
+          <p>{{ item.description }}</p>
+        </div>
       </div>
     </div>
   </div>

@@ -122,26 +122,14 @@ export class WaitlistComponent implements OnInit {
         'Enter phone number with country code (e.g., +15551234567)';
       return;
     }
-    this.recaptchaVerifier = new firebase.auth.RecaptchaVerifier(
-      'recaptcha-container',
-      {
-        size: 'invisible', // Set to 'normal' instead of 'invisible' for testing
-        callback: (response: any) => {
-          console.log('reCAPTCHA solved:', response);
-        },
-      }
-    );
 
-    firebase
-      .auth()
-      .signInWithPhoneNumber(this.phoneNumber, this.recaptchaVerifier)
-      .then((confirmationResult) => {
-        this.verificationId = confirmationResult;
-        console.log(confirmationResult);
+    this.waitlistService
+      .triggerVerification(this.phoneNumber)
+      .then((confirmationResult: any) => {
         this.verificationSent = true;
         this.authMessage = 'OTP sent successfully!';
       })
-      .catch((error) => {
+      .catch((error: any) => {
         this.authMessage = `Error: ${error}`;
       });
   }
@@ -153,14 +141,8 @@ export class WaitlistComponent implements OnInit {
       return;
     }
 
-    const credential = PhoneAuthProvider.credential(
-      this.verificationId.verificationId,
-      this.otpCode
-    );
-
-    firebase
-      .auth()
-      .signInWithCredential(credential)
+    this.waitlistService
+      .verifyOTP(this.phoneNumber, this.otpCode)
       .then(async (userCredential) => {
         await this.waitlistService.saveUser(formData);
         await this.waitlistService.addToWaitlist(formData);
@@ -169,7 +151,7 @@ export class WaitlistComponent implements OnInit {
         this.waitlistForm.reset();
         this.getWaitlist();
       })
-      .catch((error) => {
+      .catch((error: any) => {
         this.authMessage = `Verification failed: ${error.message}`;
       });
   }
