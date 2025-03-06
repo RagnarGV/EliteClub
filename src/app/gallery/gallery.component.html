@@ -1,5 +1,10 @@
 <div class="mx-5 pt-5">
   <h1 class="title text-center text-warning py-5">Club Elite Gallery</h1>
+  @if (loading){
+  <div class="d-flex justify-content-center">
+    <app-loader></app-loader>
+  </div>
+  }
   <div class="container border border-warning rounded-3">
     <div class="card-container gap-4 my-4 p-5">
       <div *ngIf="galleryItems.length === 0" class="no-items">
@@ -13,7 +18,7 @@
         <img
           src="{{ item.image }}"
           [alt]="item.title"
-          [@slideInOut]
+          [@fadeIn]
           class="gallery-image"
         />
         <div class="gallery-details">

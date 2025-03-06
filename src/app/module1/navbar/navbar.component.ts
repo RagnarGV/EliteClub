@@ -10,4 +10,11 @@ import { RouterModule } from '@angular/router';
 })
 export class NavbarComponent {
   isCollapsed = false;
+
+  collapseNavbar() {
+    const navbarCollapse = document.getElementById('navbarNav');
+    if (navbarCollapse?.classList.contains('show')) {
+      navbarCollapse.classList.remove('show');
+    }
+  }
 }

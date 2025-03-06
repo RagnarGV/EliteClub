@@ -8,7 +8,7 @@ import { CommonModule } from '@angular/common';
   styleUrl: './special-events.component.scss',
 })
 export class SpecialEventsComponent implements OnInit {
-  specialEvents: any;
+  specialEvents: any[] = [];
   constructor(private scheduleService: ScheduleService) {}
 
   ngOnInit(): void {
@@ -17,7 +17,11 @@ export class SpecialEventsComponent implements OnInit {
 
   getSpecialEvents() {
     this.scheduleService.getSpecialEvents().then((data) => {
-      this.specialEvents = data;
+      data.forEach((event: any) => {
+        if (event.is_live) {
+          this.specialEvents.push(event);
+        }
+      });
       console.log(this.specialEvents);
     });
   }
