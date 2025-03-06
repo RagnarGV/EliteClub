@@ -63,12 +63,12 @@ body {
 @media (max-width: 768px) {
   body {
     height: auto;
-    padding: 20px;
+    padding: 10px;
   }
 
-  .container {
+  .card-container {
     flex-direction: column;
-    width: 90%;
+    width: 100%;
     height: auto;
     gap: 1rem;
   }
