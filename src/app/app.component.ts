@@ -9,6 +9,7 @@ import { HomeComponent } from './home/home.component';
 import { AboutUsComponent } from './about-us/about-us.component';
 import { CommonModule } from '@angular/common';
 import { ReviewsComponent } from './reviews/reviews.component';
+import { SpecialEventsComponent } from './special-events/special-events.component';
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -22,6 +23,7 @@ import { ReviewsComponent } from './reviews/reviews.component';
     AboutUsComponent,
     RouterOutlet,
     ReviewsComponent,
+    SpecialEventsComponent,
   ],
 
   templateUrl: './app.component.html',

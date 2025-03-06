@@ -50,6 +50,11 @@ export class ScheduleService {
     return response.data;
   }
 
+  async getSpecialEvents() {
+    const response = await axios.get(this.newApiUrl + '/special-events');
+    return response.data;
+  }
+
   async checkVerification(phoneNumber: string): Promise<boolean> {
     try {
       const response = await axios.get(
