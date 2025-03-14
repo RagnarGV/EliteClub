@@ -44,6 +44,20 @@ export class ScheduleService {
     const response = await axios.get(this.newApiUrl + '/waitlist');
     return response.data;
   }
+  async getTOC(id: any) {
+    const response = await axios.get(this.newApiUrl + '/toc/' + id);
+    return response.data;
+  }
+
+  async getTocSettings() {
+    const response = await axios.get(this.newApiUrl + '/toc-settings');
+    return response.data;
+  }
+
+  async getTocSettingsById(id: any) {
+    const response = await axios.get(this.newApiUrl + '/toc-settings/' + id);
+    return response.data;
+  }
 
   async getGalleryItems() {
     const response = await axios.get(this.newApiUrl + '/gallery');
@@ -107,6 +121,16 @@ export class ScheduleService {
     } catch (error: any) {
       if (error.status === 400) {
         alert('Phone number already exists');
+      }
+    }
+  }
+
+  async addToTOCWaitlist(id: any, userData: any): Promise<void> {
+    try {
+      await axios.post(`${this.newApiUrl}/toc/` + id, userData);
+    } catch (error: any) {
+      if (error.status === 400) {
+        alert('You are already on the waitlist.');
       }
     }
   }

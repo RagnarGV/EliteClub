@@ -44,9 +44,9 @@ export class WaitlistComponent implements OnInit {
   recaptchaVerifier: any;
   todayGames: any[] = [];
   selectedGame: any;
+  tocSettings: any;
+  tocSettingsId: any;
   constructor(
-    private afAuth: AngularFireAuth,
-    private auth: Auth,
     private fb: FormBuilder,
     private waitlistService: ScheduleService
   ) {
@@ -58,19 +58,44 @@ export class WaitlistComponent implements OnInit {
         [Validators.required, Validators.pattern(/^\+1[0-9]{10}$/)],
       ],
       game: ['', Validators.required],
+      toc_day: [''],
       gameType: ['', [Validators.required]],
       smsUpdates: [false],
     });
   }
   ngOnInit(): void {
     window.scrollTo(0, 0);
-    this.getWaitlist();
-    this.getTodayGames();
   }
-  onGameChange() {
-    this.selectedGame = this.waitlistForm.controls['game'].value;
-    console.log(this.selectedGame);
+  onChangeGame() {
+    this.todayGames = [];
+    this.waitlist = [];
+    if (this.waitlistForm.controls['game'].value === 'toc') {
+      console.log(this.waitlistForm.controls['game'].value);
+      this.getTocDays();
+    } else if (this.waitlistForm.controls['game'].value === 'cash') {
+      this.tocSettings = '';
+      this.waitlistForm.controls['toc_day'].reset;
+      this.getWaitlist();
+      this.getTodayGames();
+    }
   }
+
+  onTocDaySelect() {
+    this.todayGames = [];
+    this.waitlist = [];
+    console.log(this.waitlistForm.controls['game'].value);
+    this.waitlistService
+      .getTocSettingsById(this.waitlistForm.controls['toc_day'].value)
+      .then((data: any) => {
+        this.todayGames.push(data);
+      });
+    this.getTocWaitlist(this.waitlistForm.controls['toc_day'].value);
+  }
+
+  onPhoneNumberChanged() {
+    this.firstUserModal = false;
+  }
+
   async getTodayGames() {
     this.waitlistService.getSchedule().then((response) => {
       response.forEach((day: { day: string; games: any[] }) => {
@@ -86,6 +111,20 @@ export class WaitlistComponent implements OnInit {
       });
     });
   }
+
+  async getTocDays() {
+    this.waitlistService.getTocSettings().then((response) => {
+      console.log(response);
+      this.tocSettings = response;
+    });
+  }
+  async getTocWaitlist(id: any) {
+    this.waitlistService.getTOC(id).then((response) => {
+      console.log(response);
+      this.waitlist = response;
+    });
+  }
+
   async getWaitlist() {
     this.waitlistService.getWaitlist().then((response) => {
       console.log(response);
@@ -94,32 +133,87 @@ export class WaitlistComponent implements OnInit {
   }
 
   async onSubmit() {
-    if (this.waitlistForm.valid) {
-      const formData = this.waitlistForm.value;
-
-      try {
-        const isVerified = await this.waitlistService.checkVerification(
-          formData.phone
-        );
-
-        if (isVerified) {
-          // Add user to the waitlist and save to the database
-          await this.waitlistService.addToWaitlist(formData);
-
-          // Optionally, reset the form
-          this.waitlistForm.reset();
-          this.getWaitlist();
-        } else {
-          this.phoneNumber = this.waitlistForm.controls['phone'].value;
-          this.firstUserModal = true;
+    this.tocSettingsId = this.waitlistForm.controls['toc_day'].value;
+    if (this.selectedGame == 'cash') {
+      if (this.waitlistForm.valid) {
+        const formData = this.waitlistForm.value;
+        console.log(formData);
+        try {
+          const isVerified = await this.waitlistService.checkVerification(
+            formData.phone
+          );
+          if (isVerified) {
+            await this.waitlistService.addToWaitlist(formData);
+            this.waitlistForm.reset();
+            this.waitlistForm.controls['phone'].setValue('+1');
+            this.getWaitlist();
+          } else {
+            this.phoneNumber = this.waitlistForm.controls['phone'].value;
+            this.firstUserModal = true;
+            console.log(this.firstUserModal);
+          }
+        } catch (error) {
+          console.error('Error:', error);
+          this.errorMessage = 'An error occurred. Please try again later.';
         }
-      } catch (error) {
-        console.error('Error:', error);
-        this.errorMessage = 'An error occurred. Please try again later.';
+      } else {
+        console.log('Form is invalid');
       }
     } else {
-      console.log('Form is invalid');
+      if (this.waitlistForm.valid) {
+        const formData = this.waitlistForm.value;
+
+        console.log(formData);
+        try {
+          const isVerified = await this.waitlistService.checkVerification(
+            formData.phone
+          );
+          if (isVerified) {
+            await this.waitlistService.addToTOCWaitlist(
+              this.tocSettingsId,
+              formData
+            );
+            this.waitlistForm.reset();
+            this.waitlistForm.controls['phone'].setValue('+1');
+            this.getTocWaitlist(this.tocSettingsId);
+          } else {
+            this.phoneNumber = this.waitlistForm.controls['phone'].value;
+            this.firstUserModal = true;
+          }
+        } catch (error) {
+          console.error('Error:', error);
+          this.errorMessage = 'An error occurred. Please try again later.';
+        }
+      } else {
+        console.log('Form is invalid');
+      }
     }
+    // if (this.waitlistForm.valid) {
+    //   const formData = this.waitlistForm.value;
+
+    //   try {
+    //     const isVerified = await this.waitlistService.checkVerification(
+    //       formData.phone
+    //     );
+
+    //     if (isVerified) {
+    //       // Add user to the waitlist and save to the database
+    //       await this.waitlistService.addToWaitlist(formData);
+
+    //       // Optionally, reset the form
+    //       this.waitlistForm.reset();
+    //       this.getWaitlist();
+    //     } else {
+    //       this.phoneNumber = this.waitlistForm.controls['phone'].value;
+    //       this.firstUserModal = true;
+    //     }
+    //   } catch (error) {
+    //     console.error('Error:', error);
+    //     this.errorMessage = 'An error occurred. Please try again later.';
+    //   }
+    // } else {
+    //   console.log('Form is invalid');
+    // }
   }
 
   async sendOTP() {

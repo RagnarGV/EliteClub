@@ -28,29 +28,45 @@
           formControlName="phone"
           type="text"
           placeholder="Enter your phone number"
+          (ngModelChange)="onPhoneNumberChanged()"
         />
       </div>
-      <div class="form-floating">
+      <div class="form-group">
+        <label for="game">Game Type</label>
         <select
           id="game"
-          class="form-control"
           formControlName="game"
           type="text"
           placeholder="Enter your phone number"
-          (change)="onGameChange()"
+          (ngModelChange)="onChangeGame()"
         >
           <option value="cash">Cash</option>
           <option value="toc">Tournament of Champions</option>
         </select>
-        <label for="game">Game Type</label>
       </div>
-      <div class="form-group">
+
+      <div class="form-group" *ngIf="tocSettings">
+        <label for="toc_day">Select Day for TOC</label>
+        <select
+          id="toc_day"
+          formControlName="toc_day"
+          type="text"
+          placeholder="Select Day for TOC"
+          (change)="onTocDaySelect()"
+        >
+          <option *ngFor="let toc_set of tocSettings" [value]="toc_set.id">
+            {{ toc_set.day_date }}
+          </option>
+        </select>
+      </div>
+
+      <div class="form-group" *ngIf="todayGames.length > 0">
         <label>Select Game Type:</label>
         <div *ngFor="let game of todayGames" class="form-check">
           <input
             type="radio"
             class="form-check-input"
-            [value]="game.gameType + ' ' + game.limit"
+            [value]="game.gameType"
             formControlName="gameType"
             id="{{ 'gameType-' + game.gameType + '-' + game.limit }}"
           />
@@ -58,7 +74,7 @@
             class="form-check-label"
             [for]="'gameType-' + game.gameType + '-' + game.limit"
           >
-            {{ game.gameType }} - {{ game.limit }}
+            {{ game.gameType }}
           </label>
         </div>
       </div>
@@ -75,10 +91,12 @@
     </form>
 
     <!-- Display error or verification message -->
-    <div *ngIf="firstUserModal" class="error-message">
+    <div *ngIf="firstUserModal" class="form-container my-5">
       <div>
-        <h2>Phone Number Authentication</h2>
-
+        <h2>Register</h2>
+        <h5 class="text-center">
+          it looks like you are new here, welcome to the Club Elite.
+        </h5>
         <!-- Phone Number Input -->
         <div *ngIf="!verificationSent">
           <input
@@ -107,23 +125,20 @@
     </div>
   </div>
 
-  <div class="waitlist-container">
-    <h3>$1/3 NLH Waitlist</h3>
+  <div *ngFor="let game of todayGames" class="waitlist-container">
+    <h3>{{ game.gameType }} Waitlist</h3>
     <p>✔️ indicates the player is checked in at the club</p>
 
     <!-- Display the waitlist data -->
     <ul *ngIf="waitlist.length > 0; else noData">
       <li *ngFor="let entry of waitlist">
         <span class="player-info">
-          {{ entry.firstName }} {{ entry.lastInitial }} -
-          {{ entry.phone }}
+          {{ entry.firstName }} {{ entry.lastInitial }}
         </span>
         <span class="game-info" *ngIf="entry.gameType"
           >[{{ entry.gameType }}]</span
         >
-        <!-- <span class="sms-info" *ngIf="entry.smsUpdates"
-          >[SMS Updates Enabled]</span
-        > -->
+
         <span class="status-info" *ngIf="entry.checkedIn">✔️</span>
       </li>
     </ul>
