@@ -6,3 +6,12 @@
 }
 
 @import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap");
+.carousel-control-prev-icon {
+  background-image: url("../../assets/previous.svg");
+  transform: scale(1.5);
+}
+
+.carousel-control-next-icon {
+  background-image: url("../../assets/next.svg");
+  transform: scale(1.5);
+}
