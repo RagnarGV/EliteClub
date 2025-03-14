@@ -1,4 +1,4 @@
-<div class="mx-5">
+<div class="mx-3">
   <h1 class="title text-center text-warning py-5">Schedule</h1>
   @if (loading){
   <div class="d-flex justify-content-center">
@@ -36,7 +36,7 @@
               </div>
               <div class="card-body">
                 <p class="card-text" *ngFor="let game of day.games">
-                  <strong>{{ game.type }}</strong
+                  <strong>{{ game.gameType }}</strong
                   ><br />
                   <span>{{ game.limit }}</span>
                 </p>

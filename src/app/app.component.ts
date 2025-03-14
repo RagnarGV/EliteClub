@@ -10,6 +10,7 @@ import { AboutUsComponent } from './about-us/about-us.component';
 import { CommonModule } from '@angular/common';
 import { ReviewsComponent } from './reviews/reviews.component';
 import { SpecialEventsComponent } from './special-events/special-events.component';
+import { DownloadComponent } from './download/download.component';
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -24,6 +25,7 @@ import { SpecialEventsComponent } from './special-events/special-events.componen
     RouterOutlet,
     ReviewsComponent,
     SpecialEventsComponent,
+    DownloadComponent,
   ],
 
   templateUrl: './app.component.html',

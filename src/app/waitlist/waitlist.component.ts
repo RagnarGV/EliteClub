@@ -43,6 +43,7 @@ export class WaitlistComponent implements OnInit {
   authMessage: string = '';
   recaptchaVerifier: any;
   todayGames: any[] = [];
+  selectedGame: any;
   constructor(
     private afAuth: AngularFireAuth,
     private auth: Auth,
@@ -56,6 +57,7 @@ export class WaitlistComponent implements OnInit {
         { value: '+1', disabled: false },
         [Validators.required, Validators.pattern(/^\+1[0-9]{10}$/)],
       ],
+      game: ['', Validators.required],
       gameType: ['', [Validators.required]],
       smsUpdates: [false],
     });
@@ -64,6 +66,10 @@ export class WaitlistComponent implements OnInit {
     window.scrollTo(0, 0);
     this.getWaitlist();
     this.getTodayGames();
+  }
+  onGameChange() {
+    this.selectedGame = this.waitlistForm.controls['game'].value;
+    console.log(this.selectedGame);
   }
   async getTodayGames() {
     this.waitlistService.getSchedule().then((response) => {

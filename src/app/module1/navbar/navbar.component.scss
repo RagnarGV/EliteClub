@@ -24,21 +24,24 @@
   border-bottom: 2px solid burlywood;
   box-shadow: 0px 1px 0px goldenrod;
 }
+
+.active-tab {
+  font-size: 16px;
+  font-weight: bold;
+  color: goldenrod;
+}
+
 nav {
   position: fixed;
-  top: 10px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(255, 255, 255, 0.1);
+  background: black;
   width: 90%;
   max-width: 1100px;
   border-radius: 15px;
-  backdrop-filter: blur(30px);
   color: rgb(170, 146, 84);
   box-shadow: 0px 0px 30px 0px rgba(277, 228, 237, 0.37);
   border: 2px solid rgba(255, 255, 255, 0.18);
   margin: 0 auto;
-  z-index: 1000;
+  // z-index: 1000;
 }
 
 .dropdown-toggle {

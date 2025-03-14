@@ -7,6 +7,7 @@ import { WaitlistComponent } from './waitlist/waitlist.component';
 import { TocComponent } from './toc/toc.component';
 import { ReviewsComponent } from './reviews/reviews.component';
 import { SpecialEventsComponent } from './special-events/special-events.component';
+import { DownloadComponent } from './download/download.component';
 export const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'about-us', component: AboutUsComponent },
@@ -15,6 +16,7 @@ export const routes: Routes = [
   { path: 'waitlist', component: WaitlistComponent },
   { path: 'toc', component: TocComponent },
   { path: 'reviews', component: ReviewsComponent },
+  { path: 'download', component: DownloadComponent },
   { path: 'special-events', component: SpecialEventsComponent },
   { path: '**', redirectTo: '', pathMatch: 'full' },
 ];

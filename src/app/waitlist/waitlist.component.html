@@ -1,6 +1,6 @@
-<div class="mx-5 mt-5">
+<div class="mx-3 mt-5">
   <h1 class="title text-center text-warning py-5">Join The Waitlist</h1>
-  <div class="form-container my-5">
+  <div class="container form-container my-5">
     <form [formGroup]="waitlistForm" (ngSubmit)="onSubmit()">
       <div class="form-group">
         <label for="firstName">First Name</label>
@@ -30,21 +30,35 @@
           placeholder="Enter your phone number"
         />
       </div>
+      <div class="form-floating">
+        <select
+          id="game"
+          class="form-control"
+          formControlName="game"
+          type="text"
+          placeholder="Enter your phone number"
+          (change)="onGameChange()"
+        >
+          <option value="cash">Cash</option>
+          <option value="toc">Tournament of Champions</option>
+        </select>
+        <label for="game">Game Type</label>
+      </div>
       <div class="form-group">
         <label>Select Game Type:</label>
         <div *ngFor="let game of todayGames" class="form-check">
           <input
             type="radio"
             class="form-check-input"
-            [value]="game.type + ' ' + game.limit"
+            [value]="game.gameType + ' ' + game.limit"
             formControlName="gameType"
-            id="{{ 'gameType-' + game.type + '-' + game.limit }}"
+            id="{{ 'gameType-' + game.gameType + '-' + game.limit }}"
           />
           <label
             class="form-check-label"
-            [for]="'gameType-' + game.type + '-' + game.limit"
+            [for]="'gameType-' + game.gameType + '-' + game.limit"
           >
-            {{ game.type }} {{ game.limit }}
+            {{ game.gameType }} - {{ game.limit }}
           </label>
         </div>
       </div>
