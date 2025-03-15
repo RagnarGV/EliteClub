@@ -69,10 +69,11 @@ export class WaitlistComponent implements OnInit {
   onChangeGame() {
     this.todayGames = [];
     this.waitlist = [];
-    if (this.waitlistForm.controls['game'].value === 'toc') {
-      console.log(this.waitlistForm.controls['game'].value);
+    this.selectedGame = this.waitlistForm.controls['game'].value;
+    if (this.selectedGame === 'toc') {
+      console.log(this.selectedGame);
       this.getTocDays();
-    } else if (this.waitlistForm.controls['game'].value === 'cash') {
+    } else if (this.selectedGame === 'cash') {
       this.tocSettings = '';
       this.waitlistForm.controls['toc_day'].reset;
       this.getWaitlist();
@@ -135,6 +136,7 @@ export class WaitlistComponent implements OnInit {
   async onSubmit() {
     this.tocSettingsId = this.waitlistForm.controls['toc_day'].value;
     if (this.selectedGame == 'cash') {
+      console.log('Hi');
       if (this.waitlistForm.valid) {
         const formData = this.waitlistForm.value;
         console.log(formData);
@@ -161,6 +163,7 @@ export class WaitlistComponent implements OnInit {
       }
     } else {
       if (this.waitlistForm.valid) {
+        console.log('Hi');
         const formData = this.waitlistForm.value;
 
         console.log(formData);
