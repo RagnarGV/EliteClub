@@ -10,4 +10,12 @@ import { RouterModule } from '@angular/router';
 })
 export class NavbarComponent {
   isCollapsed = false;
+  actibeTab: string = 'Home';
+  collapseNavbar(active: string) {
+    this.actibeTab = active;
+    const navbarCollapse = document.getElementById('navbarNav');
+    if (navbarCollapse?.classList.contains('show')) {
+      navbarCollapse.classList.remove('show');
+    }
+  }
 }

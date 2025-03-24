@@ -81,12 +81,6 @@ input[type="checkbox"] {
 //     font-size: 14px; /* Adjust button font size */
 //   }
 // }
-.title {
-  font-family: "Bebas Neue", sans-serif;
-  font-weight: 400;
-  font-style: italic;
-}
-@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap");
 .form-container {
   margin: 0 auto;
   padding: 20px;
@@ -102,8 +96,7 @@ input[type="checkbox"] {
     text-align: center;
   }
 
-  .form-group,
-  .form-floating {
+  .form-group {
     margin-bottom: 15px;
 
     label {
@@ -112,8 +105,7 @@ input[type="checkbox"] {
       margin-bottom: 5px;
     }
 
-    input[type="text"],
-    select {
+    input[type="text"] {
       width: 100%;
       padding: 8px;
       border: 1px solid #ddd;

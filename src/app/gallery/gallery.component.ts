@@ -8,25 +8,19 @@ import {
   animate,
   state,
 } from '@angular/animations';
+import { LoaderComponent } from '../loader/loader.component';
 @Component({
   selector: 'app-gallery',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, LoaderComponent],
   templateUrl: './gallery.component.html',
   styleUrl: './gallery.component.scss',
   animations: [
-    trigger('slideInOut', [
+    trigger('fadeIn', [
       transition(':enter', [
-        style({ transform: 'translateX(-100%)' }),
-        animate('300ms ease-in', style({ transform: 'translateX(0%)' })),
+        style({ opacity: 0 }),
+        animate('600ms ease-in', style({ opacity: 1 })),
       ]),
-    ]),
-    trigger('openClose', [
-      // ...
-      state('mouseover', style({ transform: 'Scale(1.2)' })),
-      state('mouseleave', style({ transform: 'Scale(1)' })),
-      transition('mouseover => mouseleave', [animate('0.1s')]),
-      transition('mouseleave => mouseover', [animate('0.1s')]),
     ]),
   ],
 })
@@ -39,6 +33,7 @@ export class GalleryComponent implements OnInit {
   }> = [];
   isOpen = false;
   whenClicked = [false, false];
+  loading = true;
   constructor(private galleryService: ScheduleService) {}
 
   ngOnInit() {
@@ -54,6 +49,7 @@ export class GalleryComponent implements OnInit {
   async fetchGalleryItems() {
     try {
       this.galleryItems = await this.galleryService.getGalleryItems();
+      this.loading = false;
     } catch (error) {
       console.error('Failed to fetch gallery items', error);
     }

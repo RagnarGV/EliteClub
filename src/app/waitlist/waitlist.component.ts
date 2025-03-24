@@ -15,7 +15,6 @@ import {
 } from '@angular/fire/compat/auth';
 import { Auth, PhoneAuthProvider } from '@angular/fire/auth';
 import firebase from 'firebase/compat/app';
-import { trigger, transition, style, animate } from '@angular/animations';
 
 @Component({
   selector: 'app-waitlist',
@@ -44,9 +43,10 @@ export class WaitlistComponent implements OnInit {
   authMessage: string = '';
   recaptchaVerifier: any;
   todayGames: any[] = [];
+  selectedGame: any;
+  tocSettings: any;
+  tocSettingsId: any;
   constructor(
-    private afAuth: AngularFireAuth,
-    private auth: Auth,
     private fb: FormBuilder,
     private waitlistService: ScheduleService
   ) {
@@ -57,14 +57,49 @@ export class WaitlistComponent implements OnInit {
         { value: '+1', disabled: false },
         [Validators.required, Validators.pattern(/^\+1[0-9]{10}$/)],
       ],
+      game: ['cash', Validators.required],
+      toc_day: [''],
       gameType: ['', [Validators.required]],
       smsUpdates: [false],
     });
   }
   ngOnInit(): void {
+    window.scrollTo(0, 0);
+    //this.waitlistForm.controls['game'].setValue('cash')
     this.getWaitlist();
     this.getTodayGames();
   }
+  onChangeGame() {
+    this.todayGames = [];
+    this.waitlist = [];
+    this.selectedGame = this.waitlistForm.controls['game'].value;
+    if (this.selectedGame === 'toc') {
+      console.log(this.selectedGame);
+      this.getTocDays();
+    } else if (this.selectedGame === 'cash') {
+      this.tocSettings = '';
+      this.waitlistForm.controls['toc_day'].reset;
+      this.getWaitlist();
+      this.getTodayGames();
+    }
+  }
+
+  onTocDaySelect() {
+    this.todayGames = [];
+    this.waitlist = [];
+    console.log(this.waitlistForm.controls['game'].value);
+    this.waitlistService
+      .getTocSettingsById(this.waitlistForm.controls['toc_day'].value)
+      .then((data: any) => {
+        this.todayGames.push(data);
+      });
+    this.getTocWaitlist(this.waitlistForm.controls['toc_day'].value);
+  }
+
+  onPhoneNumberChanged() {
+    this.firstUserModal = false;
+  }
+
   async getTodayGames() {
     this.waitlistService.getSchedule().then((response) => {
       response.forEach((day: { day: string; games: any[] }) => {
@@ -80,6 +115,20 @@ export class WaitlistComponent implements OnInit {
       });
     });
   }
+
+  async getTocDays() {
+    this.waitlistService.getTocSettings().then((response) => {
+      console.log(response);
+      this.tocSettings = response;
+    });
+  }
+  async getTocWaitlist(id: any) {
+    this.waitlistService.getTOC(id).then((response) => {
+      console.log(response);
+      this.waitlist = response;
+    });
+  }
+
   async getWaitlist() {
     this.waitlistService.getWaitlist().then((response) => {
       console.log(response);
@@ -88,32 +137,89 @@ export class WaitlistComponent implements OnInit {
   }
 
   async onSubmit() {
-    if (this.waitlistForm.valid) {
-      const formData = this.waitlistForm.value;
-
-      try {
-        const isVerified = await this.waitlistService.checkVerification(
-          formData.phone
-        );
-
-        if (isVerified) {
-          // Add user to the waitlist and save to the database
-          await this.waitlistService.addToWaitlist(formData);
-
-          // Optionally, reset the form
-          this.waitlistForm.reset();
-          this.getWaitlist();
-        } else {
-          this.phoneNumber = this.waitlistForm.controls['phone'].value;
-          this.firstUserModal = true;
+    this.tocSettingsId = this.waitlistForm.controls['toc_day'].value;
+    if (this.selectedGame == 'cash') {
+      console.log('Hi');
+      if (this.waitlistForm.valid) {
+        const formData = this.waitlistForm.value;
+        console.log(formData);
+        try {
+          const isVerified = await this.waitlistService.checkVerification(
+            formData.phone
+          );
+          if (isVerified) {
+            await this.waitlistService.addToWaitlist(formData);
+            this.waitlistForm.reset();
+            this.waitlistForm.controls['phone'].setValue('+1');
+            this.getWaitlist();
+          } else {
+            this.phoneNumber = this.waitlistForm.controls['phone'].value;
+            this.firstUserModal = true;
+            console.log(this.firstUserModal);
+          }
+        } catch (error) {
+          console.error('Error:', error);
+          this.errorMessage = 'An error occurred. Please try again later.';
         }
-      } catch (error) {
-        console.error('Error:', error);
-        this.errorMessage = 'An error occurred. Please try again later.';
+      } else {
+        console.log('Form is invalid');
       }
     } else {
-      console.log('Form is invalid');
+      if (this.waitlistForm.valid) {
+        console.log('Hi');
+        const formData = this.waitlistForm.value;
+
+        console.log(formData);
+        try {
+          const isVerified = await this.waitlistService.checkVerification(
+            formData.phone
+          );
+          if (isVerified) {
+            await this.waitlistService.addToTOCWaitlist(
+              this.tocSettingsId,
+              formData
+            );
+            this.waitlistForm.reset();
+            this.waitlistForm.controls['phone'].setValue('+1');
+            this.getTocWaitlist(this.tocSettingsId);
+          } else {
+            this.phoneNumber = this.waitlistForm.controls['phone'].value;
+            this.firstUserModal = true;
+          }
+        } catch (error) {
+          console.error('Error:', error);
+          this.errorMessage = 'An error occurred. Please try again later.';
+        }
+      } else {
+        console.log('Form is invalid');
+      }
     }
+    // if (this.waitlistForm.valid) {
+    //   const formData = this.waitlistForm.value;
+
+    //   try {
+    //     const isVerified = await this.waitlistService.checkVerification(
+    //       formData.phone
+    //     );
+
+    //     if (isVerified) {
+    //       // Add user to the waitlist and save to the database
+    //       await this.waitlistService.addToWaitlist(formData);
+
+    //       // Optionally, reset the form
+    //       this.waitlistForm.reset();
+    //       this.getWaitlist();
+    //     } else {
+    //       this.phoneNumber = this.waitlistForm.controls['phone'].value;
+    //       this.firstUserModal = true;
+    //     }
+    //   } catch (error) {
+    //     console.error('Error:', error);
+    //     this.errorMessage = 'An error occurred. Please try again later.';
+    //   }
+    // } else {
+    //   console.log('Form is invalid');
+    // }
   }
 
   async sendOTP() {
@@ -122,26 +228,14 @@ export class WaitlistComponent implements OnInit {
         'Enter phone number with country code (e.g., +15551234567)';
       return;
     }
-    this.recaptchaVerifier = new firebase.auth.RecaptchaVerifier(
-      'recaptcha-container',
-      {
-        size: 'invisible', // Set to 'normal' instead of 'invisible' for testing
-        callback: (response: any) => {
-          console.log('reCAPTCHA solved:', response);
-        },
-      }
-    );
 
-    firebase
-      .auth()
-      .signInWithPhoneNumber(this.phoneNumber, this.recaptchaVerifier)
-      .then((confirmationResult) => {
-        this.verificationId = confirmationResult;
-        console.log(confirmationResult);
+    this.waitlistService
+      .triggerVerification(this.phoneNumber)
+      .then((confirmationResult: any) => {
         this.verificationSent = true;
         this.authMessage = 'OTP sent successfully!';
       })
-      .catch((error) => {
+      .catch((error: any) => {
         this.authMessage = `Error: ${error}`;
       });
   }
@@ -153,14 +247,8 @@ export class WaitlistComponent implements OnInit {
       return;
     }
 
-    const credential = PhoneAuthProvider.credential(
-      this.verificationId.verificationId,
-      this.otpCode
-    );
-
-    firebase
-      .auth()
-      .signInWithCredential(credential)
+    this.waitlistService
+      .verifyOTP(this.phoneNumber, this.otpCode)
       .then(async (userCredential) => {
         await this.waitlistService.saveUser(formData);
         await this.waitlistService.addToWaitlist(formData);
@@ -169,7 +257,7 @@ export class WaitlistComponent implements OnInit {
         this.waitlistForm.reset();
         this.getWaitlist();
       })
-      .catch((error) => {
+      .catch((error: any) => {
         this.authMessage = `Verification failed: ${error.message}`;
       });
   }

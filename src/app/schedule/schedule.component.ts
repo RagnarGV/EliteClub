@@ -2,11 +2,12 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { ScheduleService } from '../schedule.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { LoaderComponent } from '../loader/loader.component';
 
 @Component({
   selector: 'app-schedule',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, LoaderComponent],
   templateUrl: './schedule.component.html',
   styleUrl: './schedule.component.scss',
   providers: [ScheduleService],
@@ -14,7 +15,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 export class ScheduleComponent {
   schedule: any[] = [];
   expandedIndex: number = 0; // Default to first item
-
+  loading: boolean = true;
   constructor(private scheduleService: ScheduleService) {}
 
   ngOnInit(): void {
@@ -23,6 +24,7 @@ export class ScheduleComponent {
 
   getSchedule() {
     this.scheduleService.getSchedule().then((data) => {
+      this.loading = false;
       this.schedule = data;
       this.setExpandedIndex();
     });

@@ -1,17 +1,27 @@
 <app-navbar></app-navbar>
-<div class="scroll" *ngIf="!isWaitlistRoute">
+<article class="scroll" *ngIf="!isWaitlistRoute">
   <section id="home" class="block">
     <app-home></app-home>
   </section>
-  <section id="schedule" class="block">
+
+  <section id="special-events" class="block">
+    <app-special-events></app-special-events>
+  </section>
+  <section id="download" class="block">
+    <app-download></app-download>
+  </section>
+  <section id="schedule" class="block pt-5">
     <app-schedule></app-schedule>
   </section>
   <section id="gallery" class="block">
     <app-gallery></app-gallery>
   </section>
+  <section id="reviews" class="block">
+    <app-reviews></app-reviews>
+  </section>
   <section id="about-us" class="block">
     <app-about-us></app-about-us>
   </section>
-</div>
+</article>
 <app-footer *ngIf="!isWaitlistRoute"></app-footer>
 <router-outlet *ngIf="isWaitlistRoute"></router-outlet>

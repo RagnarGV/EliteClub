@@ -1,7 +1,7 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-black fixed-top">
+<nav class="navbar navbar-expand-lg mt-3 fixed-top">
   <div class="container">
     <button
-      class="navbar-toggler"
+      class="navbar-toggler d-flex d-lg-none align-items-center justify-content-between w-100 text-white"
       type="button"
       data-bs-toggle="collapse"
       data-bs-target="#navbarNav"
@@ -9,31 +9,101 @@
       aria-expanded="false"
       aria-label="Toggle navigation"
     >
-      <span class="navbar-toggler-icon text-white"></span>
+      <div class="navbar-toggler-icon"></div>
+      <div class="active-tab ms-auto">{{ actibeTab }}</div>
     </button>
+    <!-- <button
+      class="navbar-toggler text-white d-sm-block align-items-center justify-content-between w-100 text-white"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarNav"
+      aria-controls="navbarNav"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <div class="navbar-toggler-icon"></div>
+      <div class="active-tab ms-auto">{{ actibeTab }}</div>
+    </button> -->
     <div class="navbar-collapse collapse" id="navbarNav">
       <ul class="navbar-nav mx-auto">
         <li class="nav-item">
-          <a class="nav-link" href="#home">Home</a>
+          <a class="nav-link" href="#home" (click)="collapseNavbar('Home')"
+            >Home</a
+          >
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#schedule">Schedule </a>
+          <a
+            class="nav-link"
+            href="#schedule"
+            (click)="collapseNavbar('Schedule')"
+            >Schedule
+          </a>
         </li>
         <li class="nav-item">
           <a
             class="nav-link"
             [routerLink]="['/waitlist']"
             routerLinkActive="active"
+            (click)="collapseNavbar('Waitlist')"
           >
             Waitlist
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#gallery"> Gallery </a>
+          <a
+            class="nav-link"
+            href="#gallery"
+            (click)="collapseNavbar('Gallery')"
+            >Gallery
+          </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#about-us"> About Us </a>
+          <a
+            class="nav-link"
+            href="#about-us"
+            (click)="collapseNavbar('About Us')"
+            >About Us</a
+          >
         </li>
+        <li class="nav-item">
+          <a
+            class="nav-link"
+            href="#reviews"
+            (click)="collapseNavbar('Reviews')"
+            >Reviews</a
+          >
+        </li>
+        <div class="nav-item dropdown">
+          <button
+            class="nav-link dropdown-toggle"
+            type="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            Special Events
+          </button>
+          <ul class="dropdown-menu">
+            <li>
+              <a
+                class="nav-link"
+                href="#special-events"
+                (click)="collapseNavbar('Special Events')"
+              >
+                Special Events
+              </a>
+            </li>
+            <li>
+              <a
+                class="nav-link"
+                target="_blank"
+                href="https://play.clubgg.net/dlink/tTixdRmumncyYdRF8"
+                (click)="collapseNavbar('Club GG - Online Poker')"
+              >
+                Club GG - Online Poker
+              </a>
+            </li>
+          </ul>
+        </div>
       </ul>
     </div>
   </div>

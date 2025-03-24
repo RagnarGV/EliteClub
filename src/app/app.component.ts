@@ -8,6 +8,9 @@ import { GalleryComponent } from './gallery/gallery.component';
 import { HomeComponent } from './home/home.component';
 import { AboutUsComponent } from './about-us/about-us.component';
 import { CommonModule } from '@angular/common';
+import { ReviewsComponent } from './reviews/reviews.component';
+import { SpecialEventsComponent } from './special-events/special-events.component';
+import { DownloadComponent } from './download/download.component';
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -20,18 +23,23 @@ import { CommonModule } from '@angular/common';
     HomeComponent,
     AboutUsComponent,
     RouterOutlet,
+    ReviewsComponent,
+    SpecialEventsComponent,
+    DownloadComponent,
   ],
 
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
 export class AppComponent {
-  title = 'EliteClub';
+  title = 'CLUB ELITE';
   isWaitlistRoute = false;
 
   constructor(private router: Router) {
     this.router.events.subscribe(() => {
-      this.isWaitlistRoute = this.router.url.includes('/waitlist');
+      this.isWaitlistRoute =
+        this.router.url.includes('/waitlist') ||
+        this.router.url.includes('/toc');
     });
   }
 }

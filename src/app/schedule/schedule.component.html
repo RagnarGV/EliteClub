@@ -1,41 +1,53 @@
-<div class="accordion mx-5 pt-5" id="scheduleAccordion">
+<div class="mx-3">
   <h1 class="title text-center text-warning py-5">Schedule</h1>
-  <div class="accordion-item" *ngFor="let day of schedule; let i = index">
-    <h2 class="accordion-header" id="heading{{ i }}">
-      <button
-        class="accordion-button"
-        type="button"
-        data-bs-toggle="collapse"
-        [attr.data-bs-target]="'#collapse' + i"
-        [attr.aria-expanded]="i === expandedIndex ? 'true' : 'false'"
-        [attr.aria-controls]="'collapse' + i"
-        [class.collapsed]="i !== expandedIndex"
-      >
-        <h5>{{ day.day }}</h5>
-      </button>
-    </h2>
-    <div
-      [id]="'collapse' + i"
-      class="accordion-collapse collapse"
-      [class.show]="i === expandedIndex"
-      [attr.aria-labelledby]="'heading' + i"
-      data-bs-parent="#scheduleAccordion"
-    >
-      <div class="accordion-body">
-        <div class="card text-center">
-          <div class="card-header bg-dark text-white">
-            <small>{{ day.time }}</small>
-          </div>
-          <div class="card-body">
-            <p class="card-text" *ngFor="let game of day.games">
-              <strong>{{ game.type }}</strong
-              ><br />
-              <span>{{ game.limit }}</span>
-            </p>
-            <p class="text-muted">{{ day.description }}</p>
+  @if (loading){
+  <div class="d-flex justify-content-center">
+    <app-loader></app-loader>
+  </div>
+  }
+  <div class="container border border-warning rounded-3 py-3">
+    <div class="accordion" id="scheduleAccordion">
+      @for (day of schedule; track day.day; let i = $index){
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="heading{{ i }}">
+          <button
+            class="accordion-button"
+            type="button"
+            data-bs-toggle="collapse"
+            [attr.data-bs-target]="'#collapse' + i"
+            [attr.aria-expanded]="i === expandedIndex ? 'true' : 'false'"
+            [attr.aria-controls]="'collapse' + i"
+            [class.collapsed]="i !== expandedIndex"
+          >
+            <h5>{{ day.day }}</h5>
+          </button>
+        </h2>
+        <div
+          [id]="'collapse' + i"
+          class="accordion-collapse collapse"
+          [class.show]="i === expandedIndex"
+          [attr.aria-labelledby]="'heading' + i"
+          data-bs-parent="#scheduleAccordion"
+        >
+          <div class="accordion-body">
+            <div class="card text-center">
+              <div class="card-header bg-dark text-white">
+                <small>{{ day.time }}</small>
+              </div>
+              <div class="card-body">
+                <p class="card-text" *ngFor="let game of day.games">
+                  <strong>{{ game.gameType }}</strong
+                  ><br />
+                  <span>{{ game.limit }}</span>
+                </p>
+                <p class="text-muted">{{ day.description }}</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
+
+      }
     </div>
   </div>
 </div>
