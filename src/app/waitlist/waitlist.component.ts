@@ -57,7 +57,7 @@ export class WaitlistComponent implements OnInit {
         { value: '+1', disabled: false },
         [Validators.required, Validators.pattern(/^\+1[0-9]{10}$/)],
       ],
-      game: ['', Validators.required],
+      game: ['cash', Validators.required],
       toc_day: [''],
       gameType: ['', [Validators.required]],
       smsUpdates: [false],
@@ -65,6 +65,9 @@ export class WaitlistComponent implements OnInit {
   }
   ngOnInit(): void {
     window.scrollTo(0, 0);
+    //this.waitlistForm.controls['game'].setValue('cash')
+    this.getWaitlist();
+    this.getTodayGames();
   }
   onChangeGame() {
     this.todayGames = [];

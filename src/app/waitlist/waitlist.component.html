@@ -54,9 +54,11 @@
           placeholder="Select Day for TOC"
           (change)="onTocDaySelect()"
         >
-          <option *ngFor="let toc_set of tocSettings" [value]="toc_set.id">
-            {{ toc_set.day_date }}
-          </option>
+          <ng-container *ngFor="let toc_set of tocSettings">
+            <option *ngIf="toc_set.is_live == true" [value]="toc_set.id">
+              {{ toc_set.day_date }}
+            </option>
+          </ng-container>
         </select>
       </div>
 
@@ -127,7 +129,10 @@
 
   <div *ngFor="let game of todayGames" class="waitlist-container">
     <h3>{{ game.gameType }} Waitlist</h3>
-    <p>✔️ indicates the player is checked in at the club</p>
+    <p>
+      <i class="fa fa-check" aria-hidden="true"></i> indicates the player is
+      checked in at the club
+    </p>
 
     <!-- Display the waitlist data -->
     <ul *ngIf="waitlist.length > 0; else noData">
@@ -139,7 +144,9 @@
           >[{{ entry.gameType }}]</span
         >
 
-        <span class="status-info" *ngIf="entry.checkedIn">✔️</span>
+        <span class="status-info" *ngIf="entry.checkedIn == true"
+          ><i class="fa fa-check" aria-hidden="true"></i
+        ></span>
       </li>
     </ul>
 

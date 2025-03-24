@@ -15,6 +15,7 @@ import {
 } from '@angular/fire/compat/auth';
 import { Auth, PhoneAuthProvider } from '@angular/fire/auth';
 import firebase from 'firebase/compat/app';
+import { of, delay, Observable } from 'rxjs';
 @Component({
   selector: 'app-toc',
   imports: [
@@ -61,6 +62,7 @@ export class TocComponent implements OnInit {
     this.getWaitlist();
     this.getTodayGames();
   }
+
   async getTodayGames() {
     this.waitlistService.getSchedule().then((response) => {
       response.forEach((day: { day: string; games: any[] }) => {
