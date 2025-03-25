@@ -25,7 +25,7 @@ export class ScheduleComponent {
   getSchedule() {
     this.scheduleService.getSchedule().then((data) => {
       this.loading = false;
-      this.schedule = data;
+      this.schedule = data.filter((data: any) => data.is_live == true);
       this.setExpandedIndex();
     });
   }
