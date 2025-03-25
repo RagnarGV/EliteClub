@@ -119,7 +119,7 @@ export class WaitlistComponent implements OnInit {
   async getTocDays() {
     this.waitlistService.getTocSettings().then((response) => {
       console.log(response);
-      this.tocSettings = response;
+      this.tocSettings = response.filter((data: any) => data.is_live == true);
     });
   }
   async getTocWaitlist(id: any) {

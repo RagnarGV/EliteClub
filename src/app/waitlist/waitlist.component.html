@@ -55,7 +55,7 @@
           (change)="onTocDaySelect()"
         >
           <ng-container *ngFor="let toc_set of tocSettings">
-            <option *ngIf="toc_set.is_live == true" [value]="toc_set.id">
+            <option [value]="toc_set.id">
               {{ toc_set.day_date }}
             </option>
           </ng-container>
