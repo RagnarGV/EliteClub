@@ -33,7 +33,7 @@ import firebase from 'firebase/compat/app';
 })
 export class WaitlistComponent implements OnInit {
   waitlistForm: FormGroup;
-  waitlist: any[] = [];
+  waitlist: Waitlist[] = [];
   errorMessage: string = '';
   firstUserModal: boolean = false;
   phoneNumber: string = '';
@@ -74,7 +74,6 @@ export class WaitlistComponent implements OnInit {
     this.waitlist = [];
     this.selectedGame = this.waitlistForm.controls['game'].value;
     if (this.selectedGame === 'toc') {
-      console.log(this.selectedGame);
       this.getTocDays();
     } else if (this.selectedGame === 'cash') {
       this.tocSettings = '';
@@ -87,7 +86,7 @@ export class WaitlistComponent implements OnInit {
   onTocDaySelect() {
     this.todayGames = [];
     this.waitlist = [];
-    console.log(this.waitlistForm.controls['game'].value);
+
     this.waitlistService
       .getTocSettingsById(this.waitlistForm.controls['toc_day'].value)
       .then((data: any) => {
@@ -108,7 +107,6 @@ export class WaitlistComponent implements OnInit {
             day.day ===
             new Date().toLocaleDateString('en-US', { weekday: 'long' })
           ) {
-            console.log(game);
             this.todayGames.push(game);
           }
         });
@@ -118,20 +116,17 @@ export class WaitlistComponent implements OnInit {
 
   async getTocDays() {
     this.waitlistService.getTocSettings().then((response) => {
-      console.log(response);
       this.tocSettings = response.filter((data: any) => data.is_live == true);
     });
   }
   async getTocWaitlist(id: any) {
     this.waitlistService.getTOC(id).then((response) => {
-      console.log(response);
       this.waitlist = response;
     });
   }
 
   async getWaitlist() {
     this.waitlistService.getWaitlist().then((response) => {
-      console.log(response);
       this.waitlist = response;
     });
   }
@@ -139,10 +134,9 @@ export class WaitlistComponent implements OnInit {
   async onSubmit() {
     this.tocSettingsId = this.waitlistForm.controls['toc_day'].value;
     if (this.selectedGame == 'cash') {
-      console.log('Hi');
       if (this.waitlistForm.valid) {
         const formData = this.waitlistForm.value;
-        console.log(formData);
+
         try {
           const isVerified = await this.waitlistService.checkVerification(
             formData.phone
@@ -155,21 +149,17 @@ export class WaitlistComponent implements OnInit {
           } else {
             this.phoneNumber = this.waitlistForm.controls['phone'].value;
             this.firstUserModal = true;
-            console.log(this.firstUserModal);
           }
         } catch (error) {
           console.error('Error:', error);
           this.errorMessage = 'An error occurred. Please try again later.';
         }
       } else {
-        console.log('Form is invalid');
       }
     } else {
       if (this.waitlistForm.valid) {
-        console.log('Hi');
         const formData = this.waitlistForm.value;
 
-        console.log(formData);
         try {
           const isVerified = await this.waitlistService.checkVerification(
             formData.phone
@@ -191,7 +181,6 @@ export class WaitlistComponent implements OnInit {
           this.errorMessage = 'An error occurred. Please try again later.';
         }
       } else {
-        console.log('Form is invalid');
       }
     }
     // if (this.waitlistForm.valid) {
@@ -218,7 +207,7 @@ export class WaitlistComponent implements OnInit {
     //     this.errorMessage = 'An error occurred. Please try again later.';
     //   }
     // } else {
-    //   console.log('Form is invalid');
+
     // }
   }
 

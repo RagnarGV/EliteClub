@@ -21,7 +21,6 @@ export class ReviewsComponent implements OnInit {
   getReviews() {
     this.scheduleService.getReviews().then((reviews) => {
       this.reviews = reviews;
-      console.log(this.reviews);
     });
   }
 }

@@ -23,7 +23,6 @@ export class SpecialEventsComponent implements OnInit {
       //   }
       // });
       this.specialEvents = data.filter((data: any) => data.is_live == true);
-      console.log(this.specialEvents);
     });
   }
 }
