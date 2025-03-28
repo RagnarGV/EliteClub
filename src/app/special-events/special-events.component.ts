@@ -18,13 +18,11 @@ export class SpecialEventsComponent implements OnInit {
   getSpecialEvents() {
     this.scheduleService.getSpecialEvents().then((data) => {
       // data.forEach((event: any) => {
-      //   if (event.is_live == true) {
+      //   if (event.is_live) {
       //     this.specialEvents.push(event);
       //   }
       // });
-      this.specialEvents = data.filter(
-        (specials: any) => specials.is_live == true
-      );
+      this.specialEvents = data.filter((data: any) => data.is_live == true);
     });
   }
 }

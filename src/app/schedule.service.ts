@@ -6,7 +6,7 @@ axios.defaults.headers.common = {
   Expires: '0',
 };
 export interface Game {
-  type: string;
+  gameType: string;
   limit: string;
 }
 
@@ -17,7 +17,8 @@ export interface Schedule {
   description: string;
 }
 
-export interface Waitlist {
+export interface TocWaitlist {
+  toc_settings_id: number;
   firstName: string;
   lastInitial: string;
   phone: string;
@@ -26,13 +27,21 @@ export interface Waitlist {
   checkedIn: boolean;
 }
 
+export interface Gallery {
+  id: string;
+  title: string;
+  description: string;
+  image: string;
+}
+
+export type Waitlist = Omit<TocWaitlist, 'toc_settings_id'>;
+
 @Injectable({
   providedIn: 'root',
 })
 export class ScheduleService {
-  //private apiUrl = 'https://eliteclub-api.onrender.com/api';
   private newApiUrl = 'https://clubelite.ca/apis';
-  //private apiUrl = 'http://localhost:3000/api';
+
   constructor() {}
 
   async getSchedule() {

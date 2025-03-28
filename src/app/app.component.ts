@@ -32,7 +32,7 @@ import { DownloadComponent } from './download/download.component';
   styleUrl: './app.component.scss',
 })
 export class AppComponent {
-  title = 'EliteClub';
+  title = 'CLUB ELITE';
   isWaitlistRoute = false;
 
   constructor(private router: Router) {

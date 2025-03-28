@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ScheduleService } from '../schedule.service';
+import { Gallery, ScheduleService } from '../schedule.service';
 import { CommonModule } from '@angular/common';
 import {
   trigger,
@@ -25,12 +25,7 @@ import { LoaderComponent } from '../loader/loader.component';
   ],
 })
 export class GalleryComponent implements OnInit {
-  galleryItems: Array<{
-    id: string;
-    title: string;
-    description: string;
-    image: string;
-  }> = [];
+  galleryItems: Gallery[] = [];
   isOpen = false;
   whenClicked = [false, false];
   loading = true;

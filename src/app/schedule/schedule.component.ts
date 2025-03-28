@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { ScheduleService } from '../schedule.service';
+import { ScheduleService, Schedule } from '../schedule.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoaderComponent } from '../loader/loader.component';
 
@@ -13,7 +13,7 @@ import { LoaderComponent } from '../loader/loader.component';
   providers: [ScheduleService],
 })
 export class ScheduleComponent {
-  schedule: any[] = [];
+  schedule: Schedule[] = [];
   expandedIndex: number = 0; // Default to first item
   loading: boolean = true;
   constructor(private scheduleService: ScheduleService) {}
@@ -25,7 +25,7 @@ export class ScheduleComponent {
   getSchedule() {
     this.scheduleService.getSchedule().then((data) => {
       this.loading = false;
-      this.schedule = data;
+      this.schedule = data.filter((data: any) => data.is_live == true);
       this.setExpandedIndex();
     });
   }
