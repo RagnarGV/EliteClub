@@ -39,7 +39,8 @@ export class AppComponent {
     this.router.events.subscribe(() => {
       this.isWaitlistRoute =
         this.router.url.includes('/waitlist') ||
-        this.router.url.includes('/toc');
+        this.router.url.includes('/toc') ||
+        this.router.url.includes('/privacy-policy');
     });
   }
 }

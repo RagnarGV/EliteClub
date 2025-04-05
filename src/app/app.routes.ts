@@ -8,6 +8,7 @@ import { TocComponent } from './toc/toc.component';
 import { ReviewsComponent } from './reviews/reviews.component';
 import { SpecialEventsComponent } from './special-events/special-events.component';
 import { DownloadComponent } from './download/download.component';
+import { PrivacyPolicyComponent } from './privacy-policy/privacy-policy.component';
 export const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'about-us', component: AboutUsComponent },
@@ -18,5 +19,6 @@ export const routes: Routes = [
   { path: 'reviews', component: ReviewsComponent },
   { path: 'download', component: DownloadComponent },
   { path: 'special-events', component: SpecialEventsComponent },
+  { path: 'privacy-policy', component: PrivacyPolicyComponent },
   { path: '**', redirectTo: '', pathMatch: 'full' },
 ];
