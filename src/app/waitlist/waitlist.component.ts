@@ -46,6 +46,11 @@ export class WaitlistComponent implements OnInit {
   selectedGame: any;
   tocSettings: any;
   tocSettingsId: any;
+  todaySchedule: any;
+  startTime: any;
+  isCLubOpen: boolean = false;
+  isWaitlistOpen: boolean = false;
+
   constructor(
     private fb: FormBuilder,
     private waitlistService: ScheduleService
@@ -68,31 +73,78 @@ export class WaitlistComponent implements OnInit {
     //this.waitlistForm.controls['game'].setValue('cash')
     this.getWaitlist();
     this.getTodayGames();
-  }
-  onChangeGame() {
-    this.todayGames = [];
-    this.waitlist = [];
-    this.selectedGame = this.waitlistForm.controls['game'].value;
-    if (this.selectedGame === 'toc') {
-      this.getTocDays();
-    } else if (this.selectedGame === 'cash') {
-      this.tocSettings = '';
-      this.waitlistForm.controls['toc_day'].reset;
-      this.getWaitlist();
-      this.getTodayGames();
-    }
-  }
 
-  onTocDaySelect() {
-    this.todayGames = [];
-    this.waitlist = [];
-
-    this.waitlistService
-      .getTocSettingsById(this.waitlistForm.controls['toc_day'].value)
-      .then((data: any) => {
-        this.todayGames.push(data);
+    this.waitlistService.getSchedule().then((response) => {
+      response.forEach((day: any) => {
+        if (
+          day.is_live == true &&
+          day.day ===
+            new Date().toLocaleDateString('en-US', { weekday: 'long' })
+        ) {
+          this.todaySchedule = day;
+          console.log(this.todaySchedule);
+          this.startTime = this.getStartTime(this.todaySchedule.time);
+          this.isCLubOpen = true;
+          if (this.isClubLiveToday(day.day, day.time)) {
+            this.isWaitlistOpen = true;
+          }
+        }
       });
-    this.getTocWaitlist(this.waitlistForm.controls['toc_day'].value);
+    });
+  }
+  getStartTime(schedule: string) {
+    const [startStr, endStr] = schedule.split('-').map((s) => s.trim());
+    let [timePart, modifier] = startStr.split(/(am|pm)/i);
+    let [hours, minutes] = timePart.split(':');
+    console.log(minutes);
+    return Number(hours) - 1 + ':' + minutes + ' ' + modifier;
+  }
+  isClubLiveToday(dayName: string, timeRange: string): boolean {
+    const now = new Date();
+    const oneHourLater = new Date(now.getTime() + 60 * 60 * 1000);
+
+    const dayIndexMap: { [key: string]: number } = {
+      Sunday: 0,
+      Monday: 1,
+      Tuesday: 2,
+      Wednesday: 3,
+      Thursday: 4,
+      Friday: 5,
+      Saturday: 6,
+    };
+
+    const todayIndex = now.getDay(); // 0 = Sunday, 1 = Monday, ...
+    const currentDay = dayIndexMap[dayName];
+
+    // Time range parsing
+    const [startStr, endStr] = timeRange.split('-').map((s) => s.trim());
+
+    const to24Hour = (time: string): Date => {
+      const date = new Date(now);
+      let [timePart, modifier] = time.split(/(am|pm)/i);
+      let [hours, minutes] = timePart.trim().split(':').map(Number);
+
+      if (modifier.toLowerCase() === 'pm' && hours < 12) hours += 12;
+      if (modifier.toLowerCase() === 'am' && hours === 12) hours = 0;
+
+      date.setHours(hours, minutes, 0, 0);
+      return date;
+    };
+
+    let startTime = to24Hour(startStr);
+    let endTime = to24Hour(endStr);
+
+    // If end time is earlier, it means it goes to next day (e.g., 7:00 PM - 4:00 AM)
+    if (endTime <= startTime) {
+      endTime.setDate(endTime.getDate() + 1);
+    }
+
+    // Adjust start and end dates to match the intended weekday
+    const dayDiff = currentDay - startTime.getDay();
+    startTime.setDate(startTime.getDate() + dayDiff);
+    endTime.setDate(endTime.getDate() + dayDiff);
+
+    return oneHourLater >= startTime && oneHourLater <= endTime;
   }
 
   onPhoneNumberChanged() {
@@ -114,16 +166,16 @@ export class WaitlistComponent implements OnInit {
     });
   }
 
-  async getTocDays() {
-    this.waitlistService.getTocSettings().then((response) => {
-      this.tocSettings = response.filter((data: any) => data.is_live == true);
-    });
-  }
-  async getTocWaitlist(id: any) {
-    this.waitlistService.getTOC(id).then((response) => {
-      this.waitlist = response;
-    });
-  }
+  // async getTocDays() {
+  //   this.waitlistService.getTocSettings().then((response) => {
+  //     this.tocSettings = response.filter((data: any) => data.is_live == true);
+  //   });
+  // }
+  // async getTocWaitlist(id: any) {
+  //   this.waitlistService.getTOC(id).then((response) => {
+  //     this.waitlist = response;
+  //   });
+  // }
 
   async getWaitlist() {
     this.waitlistService.getWaitlist().then((response) => {
@@ -133,83 +185,55 @@ export class WaitlistComponent implements OnInit {
 
   async onSubmit() {
     this.tocSettingsId = this.waitlistForm.controls['toc_day'].value;
-    if (this.selectedGame == 'cash') {
-      if (this.waitlistForm.valid) {
-        const formData = this.waitlistForm.value;
 
-        try {
-          const isVerified = await this.waitlistService.checkVerification(
-            formData.phone
-          );
-          if (isVerified) {
-            await this.waitlistService.addToWaitlist(formData);
-            this.waitlistForm.reset();
-            this.waitlistForm.controls['phone'].setValue('+1');
-            this.getWaitlist();
-          } else {
-            this.phoneNumber = this.waitlistForm.controls['phone'].value;
-            this.firstUserModal = true;
-          }
-        } catch (error) {
-          console.error('Error:', error);
-          this.errorMessage = 'An error occurred. Please try again later.';
-        }
-      } else {
-      }
-    } else {
-      if (this.waitlistForm.valid) {
-        const formData = this.waitlistForm.value;
+    if (this.waitlistForm.valid) {
+      const formData = this.waitlistForm.value;
 
-        try {
-          const isVerified = await this.waitlistService.checkVerification(
-            formData.phone
-          );
-          if (isVerified) {
-            await this.waitlistService.addToTOCWaitlist(
-              this.tocSettingsId,
-              formData
-            );
-            this.waitlistForm.reset();
-            this.waitlistForm.controls['phone'].setValue('+1');
-            this.getTocWaitlist(this.tocSettingsId);
-          } else {
-            this.phoneNumber = this.waitlistForm.controls['phone'].value;
-            this.firstUserModal = true;
-          }
-        } catch (error) {
-          console.error('Error:', error);
-          this.errorMessage = 'An error occurred. Please try again later.';
+      try {
+        const isVerified = await this.waitlistService.checkVerification(
+          formData.phone
+        );
+        if (isVerified) {
+          await this.waitlistService.addToWaitlist(formData);
+          this.waitlistForm.reset();
+          this.waitlistForm.controls['phone'].setValue('+1');
+          this.getWaitlist();
+        } else {
+          this.phoneNumber = this.waitlistForm.controls['phone'].value;
+          this.firstUserModal = true;
         }
-      } else {
+      } catch (error) {
+        console.error('Error:', error);
+        this.errorMessage = 'An error occurred. Please try again later.';
       }
     }
-    // if (this.waitlistForm.valid) {
-    //   const formData = this.waitlistForm.value;
-
-    //   try {
-    //     const isVerified = await this.waitlistService.checkVerification(
-    //       formData.phone
-    //     );
-
-    //     if (isVerified) {
-    //       // Add user to the waitlist and save to the database
-    //       await this.waitlistService.addToWaitlist(formData);
-
-    //       // Optionally, reset the form
-    //       this.waitlistForm.reset();
-    //       this.getWaitlist();
-    //     } else {
-    //       this.phoneNumber = this.waitlistForm.controls['phone'].value;
-    //       this.firstUserModal = true;
-    //     }
-    //   } catch (error) {
-    //     console.error('Error:', error);
-    //     this.errorMessage = 'An error occurred. Please try again later.';
-    //   }
-    // } else {
-
-    // }
   }
+  // if (this.waitlistForm.valid) {
+  //   const formData = this.waitlistForm.value;
+
+  //   try {
+  //     const isVerified = await this.waitlistService.checkVerification(
+  //       formData.phone
+  //     );
+
+  //     if (isVerified) {
+  //       // Add user to the waitlist and save to the database
+  //       await this.waitlistService.addToWaitlist(formData);
+
+  //       // Optionally, reset the form
+  //       this.waitlistForm.reset();
+  //       this.getWaitlist();
+  //     } else {
+  //       this.phoneNumber = this.waitlistForm.controls['phone'].value;
+  //       this.firstUserModal = true;
+  //     }
+  //   } catch (error) {
+  //     console.error('Error:', error);
+  //     this.errorMessage = 'An error occurred. Please try again later.';
+  //   }
+  // } else {
+
+  // }
 
   async sendOTP() {
     if (!this.phoneNumber.startsWith('+')) {

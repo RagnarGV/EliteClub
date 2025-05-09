@@ -14,6 +14,20 @@
 .accordion-body {
   padding: 0;
 }
+.row {
+  display: flex;
+}
+
+.col-6 {
+  display: flex;
+  flex-direction: column;
+}
+.card {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: fit-content; // fills available space
+}
 
 .title {
   font-family: "Bebas Neue", sans-serif;

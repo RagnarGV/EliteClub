@@ -1,122 +1,143 @@
 <div class="mx-3 mt-5 pt-5">
-  <div class="form-container my-5">
-    <h2>Join The Tournament of Champions</h2>
-    <form [formGroup]="waitlistForm" (ngSubmit)="onSubmit()">
-      <div class="form-group">
-        <label for="firstName">First Name</label>
-        <input
-          id="firstName"
-          formControlName="firstName"
-          type="text"
-          placeholder="Enter your first name"
-        />
-      </div>
-      <div class="form-group">
-        <label for="lastInitial">Last Initial</label>
-        <input
-          id="lastInitial"
-          formControlName="lastInitial"
-          type="text"
-          maxlength="1"
-          placeholder="Enter last initial"
-        />
-      </div>
-      <div class="form-group">
-        <label for="phoneNumber">Phone Number</label>
-        <input
-          id="phoneNumber"
-          formControlName="phone"
-          type="text"
-          placeholder="Enter your phone number"
-        />
-      </div>
-      <div class="form-group">
-        <label>Select Game Type:</label>
-        <div *ngFor="let game of todayGames" class="form-check">
+  <h1 class="title text-center text-warning py-5">
+    Join The Tournament of Champions
+  </h1>
+  <ng-container
+    *ngIf="isCLubOpen === true && isWaitlistOpen === true; else clubClosed"
+  >
+    <div class="form-container my-5">
+      <form [formGroup]="waitlistForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label for="firstName">First Name</label>
           <input
-            type="radio"
-            class="form-check-input"
-            [value]="game.type + ' ' + game.limit"
-            formControlName="gameType"
-            id="{{ 'gameType-' + game.type + '-' + game.limit }}"
+            id="firstName"
+            formControlName="firstName"
+            type="text"
+            placeholder="Enter your first name"
           />
-          <label
-            class="form-check-label"
-            [for]="'gameType-' + game.type + '-' + game.limit"
-          >
-            {{ game.type }} {{ game.limit }}
+        </div>
+        <div class="form-group">
+          <label for="lastInitial">Last Initial</label>
+          <input
+            id="lastInitial"
+            formControlName="lastInitial"
+            type="text"
+            maxlength="1"
+            placeholder="Enter last initial"
+          />
+        </div>
+        <div class="form-group">
+          <label for="phoneNumber">Phone Number</label>
+          <input
+            id="phoneNumber"
+            formControlName="phone"
+            type="text"
+            placeholder="Enter your phone number"
+          />
+        </div>
+        <div class="form-group">
+          <label>Please select a game</label>
+          <div *ngFor="let game of todayGames" class="form-check">
+            <input
+              type="radio"
+              class="form-check-input"
+              [value]="game.gameType"
+              formControlName="gameType"
+              id="{{ 'gameType-' + game.gameType }}"
+            />
+            <label class="form-check-label" [for]="'gameType-' + game.gameType">
+              {{ game.gameType }} - {{ game.buy_in }}
+            </label>
+          </div>
+        </div>
+
+        <div>
+          <label>
+            <input type="checkbox" formControlName="smsUpdates" />
+            Send me SMS updates about my status on the waitlist
           </label>
         </div>
-      </div>
+        <button class="btn" type="submit" [disabled]="waitlistForm.invalid">
+          Join List
+        </button>
+      </form>
 
-      <div>
-        <label>
-          <input type="checkbox" formControlName="smsUpdates" />
-          Send me SMS updates about my status on the waitlist
-        </label>
-      </div>
-      <button class="btn" type="submit" [disabled]="waitlistForm.invalid">
-        Join List
-      </button>
-    </form>
+      <!-- Display error or verification message -->
+      <div *ngIf="firstUserModal" class="error-message">
+        <div>
+          <h2>Phone Number Authentication</h2>
+          <p>
+            {{ seats }} seats are available for the tournament of champions.
+          </p>
+          <!-- Phone Number Input -->
+          <div *ngIf="!verificationSent">
+            <input
+              class="form-control mb-2"
+              [(ngModel)]="phoneNumber"
+              placeholder="+1XXXXXXXXXX"
+              disabled="true"
+            />
+            <button class="btn" (click)="sendOTP()">Send OTP</button>
+            <div id="recaptcha-container"></div>
+          </div>
 
-    <!-- Display error or verification message -->
-    <div *ngIf="firstUserModal" class="error-message">
-      <div>
-        <h2>Phone Number Authentication</h2>
-        <p>{{ seats }} seats are available for the tournament of champions.</p>
-        <!-- Phone Number Input -->
-        <div *ngIf="!verificationSent">
-          <input
-            class="form-control mb-2"
-            [(ngModel)]="phoneNumber"
-            placeholder="+1XXXXXXXXXX"
-            disabled="true"
-          />
-          <button class="btn" (click)="sendOTP()">Send OTP</button>
-          <div id="recaptcha-container"></div>
+          <!-- OTP Verification Modal -->
+          <div *ngIf="verificationSent">
+            <h3>Enter OTP</h3>
+            <input
+              class="form-control mb-2"
+              [(ngModel)]="otpCode"
+              placeholder="Enter OTP"
+            />
+            <button class="btn" (click)="verifyOTP()">Verify</button>
+          </div>
+
+          <p *ngIf="authMessage">{{ authMessage }}</p>
         </div>
-
-        <!-- OTP Verification Modal -->
-        <div *ngIf="verificationSent">
-          <h3>Enter OTP</h3>
-          <input
-            class="form-control mb-2"
-            [(ngModel)]="otpCode"
-            placeholder="Enter OTP"
-          />
-          <button class="btn" (click)="verifyOTP()">Verify</button>
-        </div>
-
-        <p *ngIf="authMessage">{{ authMessage }}</p>
       </div>
     </div>
-  </div>
 
-  <div class="waitlist-container">
-    <h3>$1/3 NLH Waitlist</h3>
-    <p>✔️ indicates the player is checked in at the club</p>
+    <div class="waitlist-container">
+      <h3>$1/3 NLH Waitlist</h3>
+      <p>
+        <i class="fa fa-check" aria-hidden="true"></i> indicates the player is
+        checked in at the club
+      </p>
 
-    <!-- Display the waitlist data -->
-    <ul *ngIf="waitlist.length > 0; else noData">
-      <li *ngFor="let entry of waitlist">
-        <span class="player-info">
-          {{ entry.firstName }} {{ entry.lastInitial }} -
-          {{ entry.phone }}
-        </span>
-        <span class="game-info" *ngIf="entry.gameType"
-          >[{{ entry.gameType }}]</span
-        >
-        <!-- <span class="sms-info" *ngIf="entry.smsUpdates"
-            >[SMS Updates Enabled]</span
-          > -->
-        <span class="status-info" *ngIf="entry.checkedIn">✔️</span>
-      </li>
-    </ul>
+      <!-- Display the waitlist data -->
+      <ul *ngIf="waitlist.length > 0; else noData">
+        <li *ngFor="let entry of waitlist">
+          <span class="player-info">
+            {{ entry.firstName }} {{ entry.lastInitial }}
+          </span>
+          <span class="game-info" *ngIf="entry.gameType"
+            >[{{ entry.gameType }}]</span
+          >
 
-    <!-- Display when there is no data -->
-    <ng-template #noData>
-      <p>No players on the waitlist yet. Be the first to join!</p>
-    </ng-template>
-  </div>
+          <span class="status-info" *ngIf="entry.checkedIn == true"
+            ><i class="fa fa-check" aria-hidden="true"></i
+          ></span>
+        </li>
+      </ul>
+
+      <!-- Display when there is no data -->
+      <ng-template #noData>
+        <p>No players on the waitlist yet. Be the first to join!</p>
+      </ng-template>
+    </div>
+  </ng-container>
+  <ng-template #clubClosed>
+    <div class="waitlist-container my-5 title">
+      <div>
+        <h1 class="text-center">We are currrently closed</h1>
+      </div>
+    </div>
+  </ng-template>
+  <ng-container *ngIf="startTime && isWaitlistOpen === false">
+    <div class="waitlist-container my-5 title">
+      <div>
+        <h1 class="text-center">Waitlist will be open at {{ startTime }}</h1>
+      </div>
+    </div>
+  </ng-container>
 </div>

@@ -41,6 +41,11 @@ export class TocComponent implements OnInit {
   recaptchaVerifier: any;
   todayGames: any[] = [];
   seats: any = 0;
+  tocSettingsId: any;
+  isCLubOpen: boolean = false;
+  startTime: string = '';
+  isWaitlistOpen: boolean = false;
+  tocSettings: any;
   constructor(
     private afAuth: AngularFireAuth,
     private auth: Auth,
@@ -59,27 +64,70 @@ export class TocComponent implements OnInit {
     });
   }
   ngOnInit(): void {
-    this.getWaitlist();
     this.getTodayGames();
+
+    const today = new Date();
+    const currentTime = today.getTime(); // in ms
+
+    this.waitlistService.getTocSettings().then((response) => {
+      response.forEach((day: any) => {
+        const dayName = today.toLocaleDateString('en-US', { weekday: 'long' });
+
+        if (day.day_date === dayName && day.is_live == true) {
+          const clubStartTimeStr = day.time; // e.g., "7:00 pm"
+          this.isCLubOpen = true;
+          // Parse time string to Date
+          const clubStartDateTime = new Date();
+          const [time, modifier] = clubStartTimeStr.split(' ');
+          let [hours, minutes] = time.split(':').map(Number);
+          if (modifier.toLowerCase() === 'pm' && hours !== 12) hours += 12;
+          if (modifier.toLowerCase() === 'am' && hours === 12) hours = 0;
+          clubStartDateTime.setHours(hours - 2, minutes, 0, 0); // 2 hours before
+          this.startTime = this.getStartTime(clubStartTimeStr);
+          // Compare
+
+          if (currentTime >= clubStartDateTime.getTime()) {
+            this.isWaitlistOpen = true;
+          }
+        }
+      });
+    });
+
+    this.getTocDays();
+  }
+
+  getStartTime(schedule: string) {
+    let [timePart, modifier] = schedule.split(/(am|pm)/i);
+    let [hours, minutes] = timePart.split(':');
+    console.log(hours);
+    return Number(hours) - 2 + ':' + minutes + ' ' + modifier;
   }
 
   async getTodayGames() {
-    this.waitlistService.getSchedule().then((response) => {
-      response.forEach((day: { day: string; games: any[] }) => {
-        day.games.forEach((game: { date: string }) => {
-          if (
-            day.day ===
-            new Date().toLocaleDateString('en-US', { weekday: 'long' })
-          ) {
-            console.log(game);
-            this.todayGames.push(game);
-          }
-        });
+    this.waitlistService.getTocSettings().then((response) => {
+      response.forEach((day: any) => {
+        if (
+          day.day_date ===
+            new Date().toLocaleDateString('en-US', { weekday: 'long' }) &&
+          day.is_live == true
+        ) {
+          this.tocSettingsId = day.id;
+          this.todayGames.push(day);
+          this.getTocWaitlist(this.tocSettingsId);
+        }
       });
     });
   }
-  async getWaitlist() {
-    this.waitlistService.getWaitlist().then((response) => {
+
+  async getTocDays() {
+    this.waitlistService.getTocSettings().then((response) => {
+      this.tocSettings = response.filter((x: any) => x.is_live == true);
+      console.log(this.tocSettings);
+    });
+  }
+
+  async getTocWaitlist(id: any) {
+    this.waitlistService.getTOC(id).then((response) => {
       console.log(response);
       this.waitlist = response;
     });
@@ -112,6 +160,9 @@ export class TocComponent implements OnInit {
     } else {
       console.log('Form is invalid');
     }
+  }
+  getWaitlist() {
+    throw new Error('Method not implemented.');
   }
 
   async sendOTP() {
