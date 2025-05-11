@@ -34,3 +34,13 @@
   font-weight: 400;
   font-style: italic;
 }
+
+.carousel-control-prev-icon {
+  background-image: url("../../assets/previous.svg");
+  transform: scale(1.5);
+}
+
+.carousel-control-next-icon {
+  background-image: url("../../assets/next.svg");
+  transform: scale(1.5);
+}

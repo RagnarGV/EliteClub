@@ -18,6 +18,10 @@ export class ScheduleComponent {
   loading: boolean = true;
   tocSchedule: any;
   tocExpandedIndex: any;
+  todaySchedule: Schedule | null = null;
+  todayTocSchedule: any = null;
+  cashActiveIndex: number = 0;
+  tocActiveIndex: any;
   constructor(private scheduleService: ScheduleService) {}
 
   ngOnInit(): void {
@@ -41,7 +45,7 @@ export class ScheduleComponent {
         .sort((a: any, b: any) => {
           this.weekdayOrder[a.day] - this.weekdayOrder[b.day];
         });
-      this.setExpandedIndex();
+      this.setTodayScheduleIndex();
     });
   }
 
@@ -54,12 +58,12 @@ export class ScheduleComponent {
           (a: any, b: any) =>
             this.weekdayOrder[a.day_date] - this.weekdayOrder[b.day_date]
         );
-      this.setTocExpandedIndex();
+      this.setTodayTocScheduleIndex();
       console.log(this.tocSchedule);
     });
   }
 
-  setExpandedIndex() {
+  setTodayScheduleIndex() {
     const daysOfWeek = [
       'Sunday',
       'Monday',
@@ -71,12 +75,11 @@ export class ScheduleComponent {
     ];
     const currentDay = daysOfWeek[new Date().getDay()];
 
-    // Find index of the current day in the schedule array
-    const index = this.schedule.findIndex((day) => day.day === currentDay);
-    this.expandedIndex = index !== -1 ? index : 0; // Expand matched day or default to 1st
+    const index = this.schedule.findIndex((s) => s.day === currentDay);
+    this.cashActiveIndex = index !== -1 ? index : 0;
   }
 
-  setTocExpandedIndex() {
+  setTodayTocScheduleIndex() {
     const daysOfWeek = [
       'Sunday',
       'Monday',
@@ -88,10 +91,9 @@ export class ScheduleComponent {
     ];
     const currentDay = daysOfWeek[new Date().getDay()];
 
-    // Find index of the current day in the schedule array
-    const tocIndex = this.tocSchedule.findIndex(
-      (day: any) => day.day_date === currentDay
+    const index = this.tocSchedule.findIndex(
+      (t: any) => t.day_date === currentDay
     );
-    this.tocExpandedIndex = tocIndex !== -1 ? tocIndex : 0; // Expand matched day or default to 1st
+    this.tocActiveIndex = index !== -1 ? index : 0;
   }
 }

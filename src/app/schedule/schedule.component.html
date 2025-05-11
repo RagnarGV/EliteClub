@@ -1,98 +1,118 @@
-<div class="mx-3">
-  @if (loading){
-  <div class="d-flex justify-content-center">
-    <app-loader></app-loader>
-  </div>
-  }
-  <div class="container border border-warning rounded-3 py-3">
-    <div class="row">
-      <h1 class="title text-center text-warning py-5">Cash Schedule</h1>
-      <div class="accordion" id="scheduleAccordion">
-        @for (day of schedule; track day.day; let i = $index){
-        <div class="accordion-item">
-          <h2 class="accordion-header" id="heading{{ i }}">
-            <button
-              class="accordion-button"
-              type="button"
-              data-bs-toggle="collapse"
-              [attr.data-bs-target]="'#collapse' + i"
-              [attr.aria-expanded]="i === expandedIndex ? 'true' : 'false'"
-              [attr.aria-controls]="'collapse' + i"
-              [class.collapsed]="i !== expandedIndex"
+<!-- CONTAINER -->
+<div class="d-flex flex-wrap justify-content-center gap-4 p-3">
+  <!-- CASH SCHEDULE CAROUSEL -->
+  <div
+    id="cashCarousel"
+    class="carousel slide"
+    data-bs-ride="false"
+    style="width: 350px"
+  >
+    <div class="carousel-inner">
+      <div
+        class="carousel-item"
+        *ngFor="let item of schedule; let i = index"
+        [ngClass]="{ active: i === cashActiveIndex }"
+      >
+        <div
+          class="card text-center border border-3"
+          [ngClass]="{
+            'border-warning': i === cashActiveIndex,
+            'border-secondary': i !== cashActiveIndex
+          }"
+        >
+          <div class="card-header bg-dark text-white">Cash Game</div>
+          <div class="card-header bg-dark text-white">{{ item.time }}</div>
+          <div class="card-body">
+            <p *ngFor="let game of item.games">
+              <strong>{{ game.gameType }}</strong
+              ><br />
+              <small>{{ game.limit }}</small>
+            </p>
+            <p class="text-muted">{{ item.description }}</p>
+          </div>
+          <div class="card-footer bg-light text-muted">
+            {{ item.day }}
+            <span *ngIf="i === cashActiveIndex" class="badge bg-success ms-2"
+              >Today</span
             >
-              <h5>{{ day.day }}</h5>
-            </button>
-          </h2>
-          <div
-            [id]="'collapse' + i"
-            class="accordion-collapse collapse"
-            [class.show]="i === expandedIndex"
-            [attr.aria-labelledby]="'heading' + i"
-            data-bs-parent="#scheduleAccordion"
-          >
-            <div class="accordion-body">
-              <div class="card text-center">
-                <div class="card-header bg-dark text-white">
-                  <small>{{ day.time }}</small>
-                </div>
-                <div class="card-body">
-                  <p class="card-text" *ngFor="let game of day.games">
-                    <strong>{{ game.gameType }}</strong
-                    ><br />
-                    <span>{{ game.limit }}</span>
-                  </p>
-                  <p class="text-muted">{{ day.description }}</p>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
-
-        }
-      </div>
-      <h1 class="title text-center text-warning py-5">TOC Schedule</h1>
-      <div class="accordion" id="tocScheduleAccordion">
-        @for (day of tocSchedule; track day.day_date; let i = $index){
-        <div class="accordion-item">
-          <h2 class="accordion-header" id="heading{{ i }}">
-            <button
-              class="accordion-button"
-              type="button"
-              data-bs-toggle="collapse"
-              [attr.data-bs-target]="'#collapse' + i"
-              [attr.aria-expanded]="i === tocExpandedIndex ? 'true' : 'false'"
-              [attr.aria-controls]="'collapse' + i"
-              [class.collapsed]="i !== tocExpandedIndex"
-            >
-              <h5>{{ day.day_date }}</h5>
-            </button>
-          </h2>
-          <div
-            [id]="'collapse' + i"
-            class="accordion-collapse collapse"
-            [class.show]="i === tocExpandedIndex"
-            [attr.aria-labelledby]="'heading' + i"
-            data-bs-parent="#tocScheduleAccordion"
-          >
-            <div class="accordion-body">
-              <div class="card text-center">
-                <div class="card-header bg-dark text-white">
-                  <small>{{ day.time }}</small>
-                </div>
-                <div class="card-body">
-                  <strong>{{ day.gameType }}</strong
-                  ><br />
-                  <span>{{ day.buy_in }}</span>
-
-                  <p class="text-muted">{{ day.description }}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        }
       </div>
     </div>
+    <button
+      class="carousel-control-prev"
+      type="button"
+      data-bs-target="#cashCarousel"
+      data-bs-slide="prev"
+    >
+      <span class="carousel-control-prev-icon"></span>
+    </button>
+    <button
+      class="carousel-control-next"
+      type="button"
+      data-bs-target="#cashCarousel"
+      data-bs-slide="next"
+    >
+      <span class="carousel-control-next-icon"></span>
+    </button>
+  </div>
+
+  <!-- TOC SCHEDULE CAROUSEL -->
+  <div
+    id="tocCarousel"
+    class="carousel slide"
+    data-bs-ride="false"
+    style="width: 350px"
+  >
+    <div class="carousel-inner">
+      <div
+        class="carousel-item"
+        *ngFor="let item of tocSchedule; let i = index"
+        [ngClass]="{ active: i === tocActiveIndex }"
+      >
+        <div
+          class="card text-center border border-3"
+          [ngClass]="{
+            'border-warning': i === tocActiveIndex,
+            'border-secondary': i !== tocActiveIndex
+          }"
+        >
+          <div class="card-header bg-dark text-white">
+            Tournament of Champions
+          </div>
+          <div class="card-header bg-dark text-white">{{ item.time }}</div>
+          <div class="card-body">
+            <p>
+              <strong>{{ item.gameType }}</strong
+              ><br />
+              <span>{{ item.buy_in }}</span>
+            </p>
+            <p class="text-muted">{{ item.description }}</p>
+          </div>
+          <div class="card-footer bg-light text-muted">
+            {{ item.day_date }}
+            <span *ngIf="i === tocActiveIndex" class="badge bg-success ms-2"
+              >Today</span
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+    <button
+      class="carousel-control-prev"
+      type="button"
+      data-bs-target="#tocCarousel"
+      data-bs-slide="prev"
+    >
+      <span class="carousel-control-prev-icon"></span>
+    </button>
+    <button
+      class="carousel-control-next"
+      type="button"
+      data-bs-target="#tocCarousel"
+      data-bs-slide="next"
+    >
+      <span class="carousel-control-next-icon"></span>
+    </button>
   </div>
 </div>
